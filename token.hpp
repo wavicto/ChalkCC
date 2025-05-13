@@ -12,6 +12,7 @@ enum TokenType {
     Int_key,
     Void_key,
     Return_key,
+    Open_parenthesis
     Close_parenthesis,
     Open_brace,
     Close_brace,
@@ -24,17 +25,23 @@ class Token {
 
     Token(TokenType t);
 
+    //Init Constants
     Token(TokenType t, int value);
 
+    //Init Identifiers
     Token(TokenType t, std::string name);
 
+    //RETURNS: the token's type
     TokenType get_type();
 
+    //RETURNS: a Constant's value
     int get_value();
-    
+
+    //RETURNS: an Identifier's name
     std::string get_name();
 
     private:
+    
     TokenType type;
     int value;
     std::string name;
