@@ -12,7 +12,7 @@ enum TokenType {
     Int_key,
     Void_key,
     Return_key,
-    Open_parenthesis
+    Open_parenthesis,
     Close_parenthesis,
     Open_brace,
     Close_brace,

@@ -24,6 +24,7 @@ class lexer {
     static std::regex constant;
     static std::regex int_key;
     static std::regex void_key;
+    static std::regex return_key;
     static std::regex open_p;
     static std::regex close_p;
     static std::regex open_b;
