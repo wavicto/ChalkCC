@@ -19,6 +19,22 @@ TokenType Token::get_type(){
     return this->type;
 }
 
+std::string Token::get_type_name(TokenType type) {
+    switch (type) {
+        case Open_brace: return "Open_brace";
+        case Close_brace: return "Close_brace";
+        case Semicolon: return "Semicolon";
+        case Identifier: return "Identifier";
+        case Constant: return "Constant";
+        case Int_key: return "Int_key";
+        case Void_key: return "Void_key";
+        case Return_key: return "Return_key";
+        case Open_parenthesis: return "Open_parenthesis";
+        case Close_parenthesis: return "Close_parenthesis";
+        default: return "Invalid";
+    }
+}
+
 int Token::get_value(){
     assert(get_type() == Constant); 
     return this->value;

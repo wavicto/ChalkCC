@@ -34,6 +34,9 @@ class Token {
     //RETURNS: the token's type
     TokenType get_type();
 
+    //RETURNS: the token's type name
+    std::string get_type_name(TokenType type);
+
     //RETURNS: a Constant's value
     int get_value();
 
