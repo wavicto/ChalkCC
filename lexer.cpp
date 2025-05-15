@@ -25,7 +25,8 @@ std::vector<Token> lexer::extract(std::ifstream &file){
     while(file >> section){
         try {
         tokenize(list, section);
-        } catch (const std::runtime_error& e) {
+        } 
+        catch (const std::runtime_error& e) {
             std::cerr << "Lexer error: " << e.what() << std::endl;
             std::exit(1);
         }
