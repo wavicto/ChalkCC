@@ -1,3 +1,6 @@
+#ifndef LEXER_HPP    
+#define LEXER_HPP
+
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -33,3 +36,5 @@ class lexer {
 
     static std::regex malformed_token;
 };
+
+#endif
