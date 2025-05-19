@@ -42,6 +42,9 @@ class Token {
 
     //RETURNS: an Identifier's name
     std::string get_name();
+    
+    //RETURNS: check on token equality
+    bool expect(TokenType expected);
 
     private:
     

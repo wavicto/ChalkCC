@@ -44,3 +44,8 @@ std::string Token::get_name(){
     assert(get_type() == Identifier);
     return this->name;
 }
+
+bool Token::expect(TokenType expected){
+    return expected == this->get_type();
+}
+

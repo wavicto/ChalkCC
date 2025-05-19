@@ -40,6 +40,7 @@ void lexer::tokenize(std::vector<Token> &list, std::string token){
 
     while (token.length() != 0){
         std::string subtoken = token.substr(start, end);
+        //searches for first valid token
         while(!matches(subtoken)){
             end++;
             subtoken = token.substr(start, end);
@@ -47,6 +48,7 @@ void lexer::tokenize(std::vector<Token> &list, std::string token){
                 throw std::runtime_error("Invalid Token");
             }
         }
+        //extends to determine if a longer token could be found
         while(matches(subtoken)){
             if (end == token.length()+1){
                 break;
