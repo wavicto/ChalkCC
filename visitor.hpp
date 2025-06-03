@@ -60,4 +60,27 @@ class Traveler : public Visitor {
     void visit(asm_imm* node) override;
 };
 
+class Generator : public Visitor {
+    public:
+    void visit(program* node) override;
+    void visit(function* node) override;
+    void visit(statement* node) override;
+    void visit(expression* node) override;
+    void visit(constant* node) override;
+    
+    asm_program* gen(program* node);
+    asm_function* gen(function* node);
+    asm_instruction* gen(statement* node);
+    asm_instruction* gen(expression* node);
+
+    void visit(asm_program* node) override;
+    void visit(asm_function* node) override;
+    void visit(asm_instruction* node) override;
+    void visit(asm_mov* node) override;
+    void visit(asm_ret* node) override;
+    void visit(asm_operand* node) override;
+    void visit(asm_reg* node) override;
+    void visit(asm_imm* node) override;
+};
+
 #endif

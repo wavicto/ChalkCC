@@ -21,6 +21,10 @@ void AST::print(){
     person.visit(this->root);
 }
 
+program* AST::get_root(){
+    return root;
+}
+
 function* AST::parse_function(std::vector<Token>& tokens) {
     function* func = new function;
     bool is_int = tokens[0].expect(Int_key);
@@ -87,3 +91,4 @@ constant* AST::parse_constant(std::vector<Token>& tokens){
     c->value = tokens[0].get_value();
     return c;
 }
+

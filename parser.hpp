@@ -2,7 +2,7 @@
 #define PARSER_HPP
 
 #include "lexer.hpp"
-#include "node.hpp"
+#include "c_node.hpp"
 
 class AST {
     public:
@@ -12,6 +12,8 @@ class AST {
     ~AST();
 
     void print();
+    program* get_root();
+
 
     private:
     program* root;
