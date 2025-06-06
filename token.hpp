@@ -15,7 +15,10 @@ enum TokenType {
     Close_parenthesis,
     Open_brace,
     Close_brace,
-    Semicolon
+    Semicolon,
+    Complement,
+    Negation,
+    Decrement
 };
 
 class Token {

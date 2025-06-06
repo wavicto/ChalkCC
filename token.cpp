@@ -28,6 +28,9 @@ std::string Token::get_type_name(TokenType type) {
         case Return_key: return "Return_key";
         case Open_parenthesis: return "Open_parenthesis";
         case Close_parenthesis: return "Close_parenthesis";
+        case Decrement: return "Decrement";
+        case Negation: return "Negation";
+        case Complement: return "Complement";
         default: return "Invalid";
     }
 }

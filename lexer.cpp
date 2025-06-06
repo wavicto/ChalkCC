@@ -10,6 +10,9 @@ std::regex lexer::close_p("\\)");
 std::regex lexer::open_b("\\{");
 std::regex lexer::close_b("\\}");
 std::regex lexer::semicol(";");
+std::regex lexer::complement("~");
+std::regex lexer::negation("-");
+std::regex lexer::decrement("--");
 std::regex lexer::malformed_token("[0-9]+[a-zA-Z_]\\w*\\b");
 
 lexer::lexer(){
@@ -66,7 +69,10 @@ bool lexer::matches(const std::string& token) {
         throw std::runtime_error("Malformed Token");
     }
 
-    bool result = std::regex_match(token, open_b) ||
+    bool result = std::regex_match(token, decrement) ||
+    std::regex_match(token, negation) ||
+    std::regex_match(token, complement) ||
+    std::regex_match(token, open_b) ||
     std::regex_match(token, close_b) ||
     std::regex_match(token, semicol) ||
     std::regex_match(token, id) ||
@@ -110,4 +116,14 @@ void lexer::token_adder(std::vector<Token> &list, std::string token){
     else if (std::regex_match(token, close_p)) {
         list.push_back(Token(Close_parenthesis));
     }
+    else if (std::regex_match(token, complement)){
+        list.push_back(Token(Complement));
+    }
+    else if (std::regex_match(token, negation)){
+        list.push_back(Token(Negation));
+    }
+    else if (std::regex_match(token, decrement)){
+        list.push_back(Token(Decrement));
+    }
+
 }

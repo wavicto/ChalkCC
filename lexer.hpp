@@ -37,6 +37,9 @@ class lexer {
     static std::regex open_b;
     static std::regex close_b;
     static std::regex semicol;
+    static std::regex complement;
+    static std::regex negation;
+    static std::regex decrement;
 
     static std::regex malformed_token;
 };

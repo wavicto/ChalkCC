@@ -1,6 +1,6 @@
 # Compiler settings
-CXX = g++
-CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -std=c++17
+CXXFLAGS ?= --std=c++17 -Wall -Werror -pedantic -g -Wno-sign-compare -Wno-comment
+CXXFLAGS += -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
 
 # Source files
 SRCS = compiler_driver.cpp codegen.cpp lexer.cpp parser.cpp token.cpp visitor.cpp
