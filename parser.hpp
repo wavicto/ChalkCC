@@ -11,7 +11,10 @@ class AST {
 
     ~AST();
 
+    //prints the C AST
     void print();
+
+    //retruns the root program node
     program* get_root();
 
 

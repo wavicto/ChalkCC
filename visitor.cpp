@@ -1,60 +1,30 @@
 #include "visitor.hpp"
+#include "c_node.hpp"
+#include "asm_node.hpp"
 
-Visitor::~Visitor() {}
+c_visitor::~c_visitor() {}
 
-void program::accept(Visitor* v){
+void program::accept(c_visitor* v){
     v->visit(this);
 }
 
-void function::accept(Visitor* v){
+void function::accept(c_visitor* v){
     v->visit(this);
 }
 
-void statement::accept(Visitor* v){
+void statement::accept(c_visitor* v){
     v->visit(this);
 }
 
-void expression::accept(Visitor* v){
+void expression::accept(c_visitor* v){
     v->visit(this);
 }
 
-void constant::accept(Visitor* v){
+void constant::accept(c_visitor* v){
     v->visit(this);
 }
 
-void asm_program::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_function::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_instruction::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_mov::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_ret::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_operand::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_reg::accept(Visitor* v){
-    v->visit(this);
-}
-
-void asm_imm::accept(Visitor* v){
-    v->visit(this);
-}
-
-void Cleaner::visit(program* node){
+void c_cleaner::visit(program* node){
     function* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -62,7 +32,7 @@ void Cleaner::visit(program* node){
     delete node;
 }
 
-void Cleaner::visit(function* node){
+void c_cleaner::visit(function* node){
     statement* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -70,7 +40,7 @@ void Cleaner::visit(function* node){
     delete node;
 }
 
-void Cleaner::visit(statement* node){
+void c_cleaner::visit(statement* node){
     expression* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -78,7 +48,7 @@ void Cleaner::visit(statement* node){
     delete node;
 }
 
-void Cleaner::visit(expression* node){
+void c_cleaner::visit(expression* node){
     constant* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -86,11 +56,81 @@ void Cleaner::visit(expression* node){
     delete node;
 }
 
-void Cleaner::visit(constant* node){
+void c_cleaner::visit(constant* node){
     delete node;
 }
 
-void Cleaner::visit(asm_program* node){
+void c_printer::visit(program* node){
+    std::cout << "Program: " << std::endl;
+    function* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
+}
+
+void c_printer::visit(function* node){
+    std::cout << "Function: Name: " << node->name << std::endl;
+    statement* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
+}
+
+void c_printer::visit(statement* node){
+    std::cout << "Statement: Return: " << std::endl;
+    expression* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
+}
+
+void c_printer::visit(expression* node){
+    std::cout << "Expression" << std::endl;
+    constant* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
+}
+
+void c_printer::visit(constant* node){
+    std::cout << "Constant(" << node->value << ")" << std::endl;
+}
+
+asm_visitor::~asm_visitor() {}
+
+void asm_program::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_function::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_instruction::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_mov::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_ret::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_operand::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_reg::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_imm::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_cleaner::visit(asm_program* node){
     asm_function* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -98,7 +138,7 @@ void Cleaner::visit(asm_program* node){
     delete node;
 }
 
-void Cleaner::visit(asm_function* node){
+void asm_cleaner::visit(asm_function* node){
     for (auto ptr : node->instructions){
         if (ptr){
             ptr->accept(this);
@@ -107,7 +147,7 @@ void Cleaner::visit(asm_function* node){
     delete node;
 }
 
-void Cleaner::visit(asm_instruction* node){
+void asm_cleaner::visit(asm_instruction* node){
     asm_instruction* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -115,23 +155,23 @@ void Cleaner::visit(asm_instruction* node){
     delete node;
 }
 
-void Cleaner::visit(asm_mov* node){
+void asm_cleaner::visit(asm_mov* node){
     asm_operand* src = node->src;
     asm_operand* dst = node->dst;
     if (src){
         src->accept(this);
     }
     if (dst){
-        src->accept(this);
+        dst->accept(this);
     }
     delete node;
 }
 
-void Cleaner::visit(asm_ret* node){
+void asm_cleaner::visit(asm_ret* node){
     delete node;
 }
 
-void Cleaner::visit(asm_operand* node){
+void asm_cleaner::visit(asm_operand* node){
     asm_operand* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
@@ -139,108 +179,72 @@ void Cleaner::visit(asm_operand* node){
     delete node;
 }
 
-void Cleaner::visit(asm_operand* node){
-    asm_operand* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
-    }
+void asm_cleaner::visit(asm_reg* node){
     delete node;
 }
 
-void Cleaner::visit(asm_reg* node){
+void asm_cleaner::visit(asm_imm* node){
     delete node;
 }
 
-void Cleaner::visit(asm_imm* node){
-    delete node;
-}
-
-void Traveler::visit(program* node){
-    std::cout << "Program: " << std::endl;
-    function* ptr = node->ptr;
+void asm_generator::visit(asm_program* node){
+    file.open("assembly.s");
+    asm_function* ptr = node->ptr;
     if (ptr){
         ptr->accept(this);
     }
+    file << ".section .note.GNU-stack,\"\",@progbits" << std::endl;
 }
 
-void Traveler::visit(function* node){
-    std::cout << "Function: Name: " << node->name << std::endl;
-    statement* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
-    }
-}
-
-void Traveler::visit(statement* node){
-    std::cout << "Statement: Return: " << std::endl;
-    expression* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
-    }
-}
-
-void Traveler::visit(expression* node){
-    std::cout << "Expression" << std::endl;
-    constant* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
-    }
-}
-
-void Traveler::visit(constant* node){
-    std::cout << "Constant(" << node->value << ")" << std::endl;
-}
-
-asm_program* Generator::gen(program* node){
-    asm_program* root = new asm_program;
-    function* ptr = node->ptr;
-    if (ptr){
-        root->ptr = gen(ptr);
-    }
-    return root;
-}
-
-asm_function* Generator::gen(function* node){
-    asm_function* func = new asm_function;
-    statement* state = node->ptr;
-
-    if(state){
-        expression* exp = state->ptr;
-        if (exp){
-            func->instructions.push_back(gen(exp));
+void asm_generator::visit(asm_function* node){
+    file << ".global " << node->name << std::endl;
+    file << node->name << ":" << std::endl;
+    for (auto ptr : node->instructions){
+        if (ptr){
+            ptr->accept(this);
         }
-        func->instructions.push_back(gen(state));
     }
-    func->name = node->name;
-    return func;
+    file << std::endl;
 }
 
-asm_instruction* Generator::gen(statement* node){
-    asm_instruction* ptr = new asm_instruction;
-    ptr->ptr = new asm_ret;
-    return ptr;
+void asm_generator::visit(asm_instruction* node){
+    asm_instruction* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
 }
 
-asm_instruction* Generator::gen(expression* node){
-    asm_instruction* ptr = new asm_instruction;
-    asm_mov* mov = new asm_mov;
+void asm_generator::visit(asm_mov* node){
+    file << "\tmovl ";
+    if (node->src){
+        node->src->accept(this);
+        file << ", ";
+    }
+    if (node->dst){
+        node->dst->accept(this);
+        file << std::endl;
+    }
+}
 
-    ptr->ptr = mov;
+void asm_generator::visit(asm_ret* node){
+    file << "\tret ";
+}
 
-    asm_operand* src = new asm_operand;
-    asm_operand* dst = new asm_operand;
+void asm_generator::visit(asm_operand* node){
+    asm_operand* ptr = node->ptr;
+    if (ptr){
+        ptr->accept(this);
+    }
+}
 
-    mov->src = src;
-    mov->dst = dst;
+void asm_generator::visit(asm_reg* node){
+    switch(node->name){
+        case 0:
+            file << "%eax";
+            break;
+    }
+}
 
-    asm_imm* v = new asm_imm;
-    v->value = node->ptr->value;
-    asm_reg* r = new asm_reg;
-    r->name = EAX;
-
-    src->ptr = v;
-    dst->ptr = r;
-
-    return ptr;
-
+void asm_generator::visit(asm_imm* node){
+    file << "$" << node->value;
 }

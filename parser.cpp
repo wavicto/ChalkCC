@@ -12,12 +12,12 @@ AST::AST(std::vector<Token>& tokens)
     }}
 
 AST::~AST(){
-    Cleaner worker;
+    c_cleaner worker;
     worker.visit(this->root);
 }
 
 void AST::print(){
-    Traveler person;
+    c_printer person;
     person.visit(this->root);
 }
 

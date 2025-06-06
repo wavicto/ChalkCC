@@ -4,7 +4,6 @@
 #include <string>
 #include <cassert>
 
-
 //Lexer TokenTypes
 enum TokenType {
     Identifier,
@@ -17,7 +16,6 @@ enum TokenType {
     Open_brace,
     Close_brace,
     Semicolon
-
 };
 
 class Token {
@@ -25,10 +23,10 @@ class Token {
 
     Token(TokenType t);
 
-    //Init Constants
+    //Initalizes Constants
     Token(TokenType t, int value);
 
-    //Init Identifiers
+    //Initalizes Identifiers
     Token(TokenType t, std::string name);
 
     //RETURNS: the token's type
@@ -43,7 +41,7 @@ class Token {
     //RETURNS: an Identifier's name
     std::string get_name();
     
-    //RETURNS: check on token equality
+    //RETURNS: if expected == this
     bool expect(TokenType expected);
 
     private:

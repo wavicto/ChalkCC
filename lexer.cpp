@@ -10,12 +10,9 @@ std::regex lexer::close_p("\\)");
 std::regex lexer::open_b("\\{");
 std::regex lexer::close_b("\\}");
 std::regex lexer::semicol(";");
-
-//malformed token check
 std::regex lexer::malformed_token("[0-9]+[a-zA-Z_]\\w*\\b");
 
 lexer::lexer(){
-
 }
 
 std::vector<Token> lexer::extract(std::ifstream &file){
