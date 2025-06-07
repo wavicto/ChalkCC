@@ -24,4 +24,17 @@ class tac_visitor {
 
     virtual ~tac_visitor();
 };
+
+class tac_cleaner : public tac_visitor {
+    public:
+    virtual void visit(tac_program* node) override;
+    virtual void visit(tac_function* node) override;
+    virtual void visit(tac_instruction* node) override;
+    virtual void visit(tac_return* node) override;
+    virtual void visit(tac_unary* node) override;
+    virtual void visit(tac_val* node) override;
+    virtual void visit(tac_constant* node) override;
+    virtual void visit(tac_var* node) override;
+};
+
 #endif

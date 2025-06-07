@@ -9,14 +9,14 @@
 class TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
-    virtual ~TACNode(){}
+    virtual ~TACNode();
 };
 
 class tac_program : public TACNode {
     public:
     virtual void accept(tac_visitor* v) override;
 
-    tac_function* ptr;
+    tac_function* func_ptr;
 };
 
 class tac_function : public TACNode {
@@ -36,7 +36,7 @@ class tac_return : public tac_instruction {
     public:
     virtual void accept(tac_visitor* v) override;
 
-    tac_val* ptr;
+    tac_val* val_ptr;
 };
 
 class tac_unary : public tac_instruction {
@@ -45,6 +45,7 @@ class tac_unary : public tac_instruction {
 
     TokenType op;
     tac_val* src;
+    //dst must be a var
     tac_val* dst;
 };
 

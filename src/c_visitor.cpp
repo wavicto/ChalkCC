@@ -3,28 +3,8 @@
 
 c_visitor::~c_visitor() {}
 
-void program::accept(c_visitor* v){
-    v->visit(this);
-}
-
-void function::accept(c_visitor* v){
-    v->visit(this);
-}
-
-void statement::accept(c_visitor* v){
-    v->visit(this);
-}
-
-void unary_op::accept(c_visitor* v){
-    v->visit(this);
-}
-
-void constant::accept(c_visitor* v){
-    v->visit(this);
-}
-
 void c_cleaner::visit(program* node){
-    function* ptr = node->ptr;
+    function* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -32,7 +12,7 @@ void c_cleaner::visit(program* node){
 }
 
 void c_cleaner::visit(function* node){
-    statement* ptr = node->ptr;
+    statement* ptr = node->state_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -40,7 +20,7 @@ void c_cleaner::visit(function* node){
 }
 
 void c_cleaner::visit(statement* node){
-    expression* ptr = node->ptr;
+    expression* ptr = node->exp_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -61,7 +41,7 @@ void c_cleaner::visit(constant* node){
 
 void c_printer::visit(program* node){
     std::cout << "Program: " << std::endl;
-    function* ptr = node->ptr;
+    function* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -69,7 +49,7 @@ void c_printer::visit(program* node){
 
 void c_printer::visit(function* node){
     std::cout << "Function: Name: " << node->name << std::endl;
-    statement* ptr = node->ptr;
+    statement* ptr = node->state_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -77,7 +57,7 @@ void c_printer::visit(function* node){
 
 void c_printer::visit(statement* node){
     std::cout << "Statement: Return " << std::endl;
-    expression* ptr = node->ptr;
+    expression* ptr = node->exp_ptr;
     if (ptr){
         ptr->accept(this);
     }

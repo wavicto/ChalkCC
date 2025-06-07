@@ -12,7 +12,7 @@ enum Reg {
 class ASMNode {
     public:
     virtual void accept(asm_visitor* v) = 0;
-    virtual ~ASMNode(){}
+    virtual ~ASMNode();
 };
 
 class asm_program : public ASMNode {

@@ -1,0 +1,36 @@
+#include "tac_node.hpp"
+
+TACNode::~TACNode(){}
+
+void tac_program::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_function::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_instruction::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_return::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_unary::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_val::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_constant::accept(tac_visitor* v) {
+    v->visit(this);
+}
+
+void tac_var::accept(tac_visitor* v) {
+    v->visit(this);
+}
+

@@ -4,7 +4,7 @@ AST::AST(std::vector<Token>& tokens)
     :root(new program)
 {
     try {
-    root->ptr = parse_function(tokens);
+    root->func_ptr = parse_function(tokens);
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Parser error: " << e.what() << std::endl;
@@ -43,7 +43,7 @@ function* AST::parse_function(std::vector<Token>& tokens) {
     
     tokens.erase(tokens.begin(), tokens.begin() + 6);
 
-    func->ptr = parse_statement(tokens);
+    func->state_ptr = parse_statement(tokens);
 
     if (tokens[0].expect(Close_brace)){
         tokens.erase(tokens.begin());
@@ -63,7 +63,7 @@ statement* AST::parse_statement(std::vector<Token>& tokens){
 
     tokens.erase(tokens.begin());
 
-    state->ptr = parse_expression(tokens);
+    state->exp_ptr = parse_expression(tokens);
 
     if(!tokens[0].expect(Semicolon)){
         throw std::runtime_error("Expected ;");

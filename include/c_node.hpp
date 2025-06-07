@@ -8,21 +8,21 @@
 class ASTNode {
     public:
     virtual void accept(c_visitor* v) = 0;
-    virtual ~ASTNode(){}
+    virtual ~ASTNode();
 };
 
 class program : public ASTNode {
     public:
     virtual void accept(c_visitor* v) override;
 
-    function* ptr;
+    function* func_ptr;
 };
 
 class function : public ASTNode {
     public:
     virtual void accept(c_visitor* v) override;
 
-    statement* ptr;
+    statement* state_ptr;
     std::string name;
 };
 
@@ -30,7 +30,7 @@ class statement: public ASTNode {
     public:
     virtual void accept(c_visitor* v) override;
 
-    expression* ptr;
+    expression* exp_ptr;
 };
 
 class expression: public ASTNode {
@@ -52,6 +52,5 @@ class unary_op : public expression {
     TokenType type;
     expression* exp_ptr;
 };
-
 
 #endif

@@ -17,7 +17,7 @@ void ASM_AST::asm_gen(){
 
 asm_program* ASM_AST::gen(program* node){
     asm_program* root = new asm_program;
-    function* ptr = node->ptr;
+    function* ptr = node->func_ptr;
     if (ptr){
         root->ptr = gen(ptr);
     }
@@ -26,10 +26,10 @@ asm_program* ASM_AST::gen(program* node){
 
 asm_function* ASM_AST::gen(function* node){
     asm_function* func = new asm_function;
-    statement* state = node->ptr;
+    statement* state = node->state_ptr;
 
     if(state){
-        expression* exp = state->ptr;
+        expression* exp = state->exp_ptr;
         if (exp){
             func->instructions.push_back(gen(exp));
         }
