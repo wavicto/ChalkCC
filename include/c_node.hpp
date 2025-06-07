@@ -35,7 +35,7 @@ class statement: public ASTNode {
 
 class expression: public ASTNode {
     public:
-    void accept(c_visitor* v) = 0;
+    virtual void accept(c_visitor* v) = 0;
 };
 
 class constant : public expression {

@@ -1,30 +1,70 @@
-#include <string>
-#include "visitor.hpp"
-#include <vector>
+#ifndef TAC_NODE_HPP    
+#define TAC_NODE_HPP
 
-/*
+#include <string>
+#include <vector>
+#include "token.hpp"
+#include "tac_visitor.hpp"
+
 class TACNode {
     public:
-    virtual void accept(asm_visitor* v) = 0;
-    virtual ~ASMNode(){}
+    virtual void accept(tac_visitor* v) = 0;
+    virtual ~TACNode(){}
 };
 
-class asm_program : public ASMNode {
+class tac_program : public TACNode {
     public:
-    virtual void accept(asm_visitor* v) override;
-    asm_function* ptr;
+    virtual void accept(tac_visitor* v) override;
+
+    tac_function* ptr;
 };
 
-class asm_function : public asm_program {
+class tac_function : public TACNode {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(tac_visitor* v) override;
+
+    std::string id;
+    std::vector<tac_instruction*> body;
+};
+
+class tac_instruction : public TACNode {
+    public:
+    virtual void accept(tac_visitor* v) = 0;
+};
+
+class tac_return : public tac_instruction {
+    public:
+    virtual void accept(tac_visitor* v) override;
+
+    tac_val* ptr;
+};
+
+class tac_unary : public tac_instruction {
+    public:
+    virtual void accept(tac_visitor* v) override;
+
+    TokenType op;
+    tac_val* src;
+    tac_val* dst;
+};
+
+class tac_val : public TACNode {
+    public:
+    virtual void accept(tac_visitor* v) = 0;
+};
+
+class tac_constant : public tac_val {
+    public:
+    virtual void accept(tac_visitor* v) override;
+
+    int value;
+};
+
+class tac_var : public tac_val {
+    public:
+    virtual void accept(tac_visitor* v) override;
+
     std::string name;
-    std::vector <asm_instruction*> instructions;
 };
 
-class asm_instruction : public asm_function {
-    public:
-    virtual void accept(asm_visitor* v) override;
-    asm_instruction* ptr;
-};
-*/
+#endif
