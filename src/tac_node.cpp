@@ -10,19 +10,11 @@ void tac_function::accept(tac_visitor* v) {
     v->visit(this);
 }
 
-void tac_instruction::accept(tac_visitor* v) {
-    v->visit(this);
-}
-
 void tac_return::accept(tac_visitor* v) {
     v->visit(this);
 }
 
 void tac_unary::accept(tac_visitor* v) {
-    v->visit(this);
-}
-
-void tac_val::accept(tac_visitor* v) {
     v->visit(this);
 }
 

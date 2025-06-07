@@ -12,16 +12,21 @@ class TAC_AST {
 
     ~TAC_AST();
 
-    //generates asm from AST
-    void tac_gen();
+    void print();
 
     private:
     tac_program* root;
+    int temp_var_count;
+    std::vector <tac_val*> temp_vars;
 
     tac_program* gen(program* node);
     tac_function* gen(function* node);
-    tac_instruction* gen(statement* node);
-    tac_instruction* gen(expression* node);
+    void gen(statement* node, std::vector<tac_instruction*>& body);
+    tac_val* gen(expression* node, std::vector<tac_instruction*>& body);
+    tac_constant* gen(constant* node);
+
+    tac_var* make_temp_var();
+    void clean_temp_var();
 };
 
 #endif

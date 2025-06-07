@@ -6,7 +6,7 @@
 #include <vector>
 #include "lexer.hpp"
 #include "parser.hpp"
-#include "codegen.hpp"
+#include "tac_ast.hpp"
 
     /*
     Command line options:
@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
     std::vector<Token> tokens = lex.extract(preprocessed_file);
     AST tree(tokens);
     tree.print();
+    TAC_AST structure(tree);
+    structure.print();
     system("rm preprocessed_file.i");
     return 0;
 }

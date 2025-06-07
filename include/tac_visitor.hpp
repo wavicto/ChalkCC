@@ -1,6 +1,8 @@
 #ifndef TAC_VISITOR_HPP
 #define TAC_VISITOR_HPP
 
+#include <iostream>
+
 //forward declaration
 class tac_program;
 class tac_function;
@@ -15,10 +17,8 @@ class tac_visitor {
     public:
     virtual void visit(tac_program* node) = 0;
     virtual void visit(tac_function* node) = 0;
-    virtual void visit(tac_instruction* node) = 0;
     virtual void visit(tac_return* node) = 0;
     virtual void visit(tac_unary* node) = 0;
-    virtual void visit(tac_val* node) = 0;
     virtual void visit(tac_constant* node) = 0;
     virtual void visit(tac_var* node) = 0;
 
@@ -29,10 +29,18 @@ class tac_cleaner : public tac_visitor {
     public:
     virtual void visit(tac_program* node) override;
     virtual void visit(tac_function* node) override;
-    virtual void visit(tac_instruction* node) override;
     virtual void visit(tac_return* node) override;
     virtual void visit(tac_unary* node) override;
-    virtual void visit(tac_val* node) override;
+    virtual void visit(tac_constant* node) override;
+    virtual void visit(tac_var* node) override;
+};
+
+class tac_printer : public tac_visitor {
+    public:
+    virtual void visit(tac_program* node) override;
+    virtual void visit(tac_function* node) override;
+    virtual void visit(tac_return* node) override;
+    virtual void visit(tac_unary* node) override;
     virtual void visit(tac_constant* node) override;
     virtual void visit(tac_var* node) override;
 };
