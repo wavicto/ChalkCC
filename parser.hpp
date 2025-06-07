@@ -24,6 +24,7 @@ class AST {
     function* parse_function(std::vector<Token>& tokens);
     statement* parse_statement(std::vector<Token>& token);
     expression* parse_expression(std::vector<Token>& tokens);
+    unary_op* parse_unary(std::vector<Token>& tokens);
     constant* parse_constant(std::vector<Token>& tokens);
 };
 

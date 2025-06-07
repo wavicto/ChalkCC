@@ -2,7 +2,7 @@
 #define ASM_NODE_HPP
 
 #include <string>
-#include "visitor.hpp"
+#include "asm_visitor.hpp"
 #include <vector>
 
 enum Reg {

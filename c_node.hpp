@@ -2,7 +2,8 @@
 #define C_NODE_HPP
 
 #include <string>
-#include "visitor.hpp"
+#include <iostream>
+#include "c_visitor.hpp"
 
 class ASTNode {
     public:
@@ -13,6 +14,7 @@ class ASTNode {
 class program : public ASTNode {
     public:
     virtual void accept(c_visitor* v) override;
+
     function* ptr;
 };
 
@@ -33,9 +35,7 @@ class statement: public ASTNode {
 
 class expression: public ASTNode {
     public:
-    virtual void accept(c_visitor* v) override;
-
-    constant* ptr;
+    void accept(c_visitor* v) = 0;
 };
 
 class constant : public expression {
@@ -43,6 +43,14 @@ class constant : public expression {
     virtual void accept(c_visitor* v) override;
 
     int value;
+};
+
+class unary_op : public expression {
+    public:
+    virtual void accept(c_visitor* v) override;
+
+    TokenType type;
+    expression* exp_ptr;
 };
 
 

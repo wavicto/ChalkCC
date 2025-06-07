@@ -74,15 +74,43 @@ statement* AST::parse_statement(std::vector<Token>& tokens){
 }
 
 expression* AST::parse_expression(std::vector<Token>& tokens){
-    expression* ep = new expression;
+    expression* exp = nullptr;
 
-    if(!tokens[0].expect(Constant)){
-        throw std::runtime_error("Expected constant");
+    if(tokens[0].expect(Constant)){
+        exp = parse_constant(tokens);
+        tokens.erase(tokens.begin());
+        return exp;
     }
+    else if (tokens[0].expect(Negation) || tokens[0].expect(Complement)){
+        exp = parse_unary(tokens);
+        return exp;
+    }
+    else if (tokens[0].expect(Open_parenthesis)){
+        tokens.erase(tokens.begin());
+        exp = parse_expression(tokens);
+        if(!tokens[0].expect(Close_parenthesis)){
+            throw std::runtime_error("Expected )");
+        }
+        tokens.erase(tokens.begin());
+        return exp;
+    }
+    else {
+        throw std::runtime_error("Expected constant, unary operator, or (");
+    }
+}
 
-    ep->ptr = parse_constant(tokens);
-    tokens.erase(tokens.begin());
-    return ep;
+unary_op* AST::parse_unary(std::vector<Token>& tokens){
+    unary_op* ptr = new unary_op;
+    if (tokens[0].expect(Negation)){
+        ptr->type = Negation;
+        tokens.erase(tokens.begin());
+    }
+    else if (tokens[0].expect(Complement)){
+        ptr->type = Complement;
+        tokens.erase(tokens.begin());
+    }
+    ptr->exp_ptr = parse_expression(tokens);
+    return ptr;
 }
 
 constant* AST::parse_constant(std::vector<Token>& tokens){

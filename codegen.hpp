@@ -3,7 +3,7 @@
 
 #include "asm_node.hpp"
 #include "parser.hpp"
-#include "visitor.hpp"
+#include "asm_visitor.hpp"
 
 class ASM_AST {
     public:
