@@ -4,7 +4,7 @@
 asm_visitor::~asm_visitor() {}
 
 void asm_cleaner::visit(asm_program* node){
-    asm_function* ptr = node->ptr;
+    asm_function* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
@@ -16,14 +16,6 @@ void asm_cleaner::visit(asm_function* node){
         if (ptr){
             ptr->accept(this);
         }
-    }
-    delete node;
-}
-
-void asm_cleaner::visit(asm_instruction* node){
-    asm_instruction* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
     }
     delete node;
 }
@@ -44,11 +36,23 @@ void asm_cleaner::visit(asm_ret* node){
     delete node;
 }
 
-void asm_cleaner::visit(asm_operand* node){
-    asm_operand* ptr = node->ptr;
-    if (ptr){
-        ptr->accept(this);
+void asm_cleaner::visit(asm_unary* node){
+    asm_operand* op_ptr = node->operand_ptr;
+    if (op_ptr){
+        op_ptr->accept(this);
     }
+    delete node;
+}
+
+void asm_cleaner::visit(allocate_stack* node){
+    delete node;
+}
+
+void asm_cleaner::visit(asm_pseudo_reg* node){
+    delete node;
+}
+
+void asm_cleaner::visit(stack_location* node){
     delete node;
 }
 
@@ -60,6 +64,7 @@ void asm_cleaner::visit(asm_imm* node){
     delete node;
 }
 
+/*
 void asm_generator::visit(asm_program* node){
     file.open("assembly.s");
     asm_function* ptr = node->ptr;
@@ -121,3 +126,4 @@ void asm_generator::visit(asm_reg* node){
 void asm_generator::visit(asm_imm* node){
     file << "$" << node->value;
 }
+*/

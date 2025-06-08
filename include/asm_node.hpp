@@ -5,8 +5,15 @@
 #include "asm_visitor.hpp"
 #include <vector>
 
+//register names in AST are size agnostic
 enum Reg {
-    EAX
+    AX,
+    R10
+};
+
+enum unary_op {
+    Not,
+    Neg
 };
 
 class ASMNode {
@@ -18,20 +25,19 @@ class ASMNode {
 class asm_program : public ASMNode {
     public:
     virtual void accept(asm_visitor* v) override;
-    asm_function* ptr;
+    asm_function* func_ptr;
 };
 
-class asm_function : public asm_program {
+class asm_function : public ASMNode {
     public:
     virtual void accept(asm_visitor* v) override;
     std::string name;
     std::vector <asm_instruction*> instructions;
 };
 
-class asm_instruction : public asm_function {
+class asm_instruction : public ASMNode {
     public:
-    virtual void accept(asm_visitor* v) override;
-    asm_instruction* ptr;
+    virtual void accept(asm_visitor* v) = 0;
 };
 
 class asm_mov : public asm_instruction {
@@ -46,10 +52,22 @@ class asm_ret : public asm_instruction {
     virtual void accept(asm_visitor* v) override;
 };
 
-class asm_operand : public asm_program {
+class asm_unary : public asm_instruction {
     public:
     virtual void accept(asm_visitor* v) override;
-    asm_operand* ptr;
+    unary_op op;
+    asm_operand* operand_ptr;
+};
+
+class allocate_stack : public asm_instruction {
+    public:
+    virtual void accept(asm_visitor* v) override;
+    int bytes;
+};
+
+class asm_operand : public ASMNode {
+    public:
+    virtual void accept(asm_visitor* v) override = 0;
 };
 
 class asm_reg : public asm_operand {
@@ -62,6 +80,18 @@ class asm_imm : public asm_operand {
     public:
     virtual void accept(asm_visitor* v) override;
     int value;
+};
+
+class asm_pseudo_reg : public asm_operand {
+    public:
+    virtual void accept(asm_visitor* v) override;
+    std::string id;
+};
+
+class stack_location : public asm_operand {
+    public:
+    virtual void accept(asm_visitor* v) override;
+    int rbp_offset;
 };
 
 #endif
