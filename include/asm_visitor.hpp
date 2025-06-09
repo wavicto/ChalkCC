@@ -34,32 +34,32 @@ class asm_visitor {
 //cleans up ASM AST nodes
 class asm_cleaner : public asm_visitor {
     public:
-    virtual void visit(asm_program* node) = 0;
-    virtual void visit(asm_function* node) = 0;
-    virtual void visit(asm_mov* node) = 0;
-    virtual void visit(asm_ret* node) = 0;
-    virtual void visit(asm_unary* node) = 0;
-    virtual void visit(allocate_stack* node) = 0;
-    virtual void visit(asm_reg* node) = 0;
-    virtual void visit(asm_imm* node) = 0;
-    virtual void visit(asm_pseudo_reg* node) = 0;
-    virtual void visit(stack_location* node) = 0;
+    virtual void visit(asm_program* node) override;
+    virtual void visit(asm_function* node) override;
+    virtual void visit(asm_mov* node) override;
+    virtual void visit(asm_ret* node) override;
+    virtual void visit(asm_unary* node) override;
+    virtual void visit(allocate_stack* node) override;
+    virtual void visit(asm_reg* node) override;
+    virtual void visit(asm_imm* node) override;
+    virtual void visit(asm_pseudo_reg* node) override;
+    virtual void visit(stack_location* node) override;
 };
 
 //generates asm from AST
 //objects have an asm file
 class asm_generator : public asm_visitor {
     public:
-    virtual void visit(asm_program* node) = 0;
-    virtual void visit(asm_function* node) = 0;
-    virtual void visit(asm_mov* node) = 0;
-    virtual void visit(asm_ret* node) = 0;
-    virtual void visit(asm_unary* node) = 0;
-    virtual void visit(allocate_stack* node) = 0;
-    virtual void visit(asm_reg* node) = 0;
-    virtual void visit(asm_imm* node) = 0;
-    virtual void visit(asm_pseudo_reg* node) = 0;
-    virtual void visit(stack_location* node) = 0;
+    virtual void visit(asm_program* node) override;
+    virtual void visit(asm_function* node) override;
+    virtual void visit(asm_mov* node) override;
+    virtual void visit(asm_ret* node) override;
+    virtual void visit(asm_unary* node) override;
+    virtual void visit(allocate_stack* node) override;
+    virtual void visit(asm_reg* node) override;
+    virtual void visit(asm_imm* node) override;
+    virtual void visit(asm_pseudo_reg* node) override;
+    virtual void visit(stack_location* node) override;
 
     std::ofstream file;
 };

@@ -4,6 +4,11 @@
 #include <string>
 #include <iostream>
 #include "c_visitor.hpp"
+#include "tac_node.hpp"
+#include "tac_ast.hpp"
+
+//forward declaration for tac generation
+class TAC_AST;
 
 class ASTNode {
     public:
@@ -36,11 +41,13 @@ class statement: public ASTNode {
 class expression: public ASTNode {
     public:
     virtual void accept(c_visitor* v) = 0;
+    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) = 0;
 };
 
 class constant : public expression {
     public:
     virtual void accept(c_visitor* v) override;
+    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) override;
 
     int value;
 };
@@ -48,6 +55,7 @@ class constant : public expression {
 class unary_op : public expression {
     public:
     virtual void accept(c_visitor* v) override;
+    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) override;
 
     TokenType type;
     expression* exp_ptr;

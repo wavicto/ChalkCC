@@ -4,6 +4,10 @@
 #include "tac_node.hpp"
 #include "tac_visitor.hpp"
 #include "parser.hpp"
+#include "c_node.hpp"
+
+//forward declaration as some AST methods depend on TAC_AST
+class AST;
 
 class TAC_AST {
     public:
@@ -22,11 +26,16 @@ class TAC_AST {
     tac_program* gen(program* node);
     tac_function* gen(function* node);
     void gen(statement* node, std::vector<tac_instruction*>& body);
-    tac_val* gen(expression* node, std::vector<tac_instruction*>& body);
+    tac_val* gen(unary_op* node, std::vector<tac_instruction*>& body);
     tac_constant* gen(constant* node);
+    
 
     tac_var* make_temp_var();
     void clean_temp_var();
+
+    //expression nodes are given friend for polymorphism
+    friend class constant;
+    friend class unary_op;
 };
 
 #endif

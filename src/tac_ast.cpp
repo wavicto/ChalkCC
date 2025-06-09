@@ -33,25 +33,21 @@ tac_function* TAC_AST::gen(function* node){
 
 void TAC_AST::gen(statement* node, std::vector<tac_instruction*>& body){
     tac_return* ret = new tac_return;
-    ret->val_ptr = gen(node->exp_ptr, body);
+    expression* exp_ptr = node->exp_ptr;
+    ret->val_ptr = exp_ptr->gen(this, body);
     body.push_back(ret);
 }
 
-tac_val* TAC_AST::gen(expression* node,  std::vector<tac_instruction*>& body){
-    tac_val* value = nullptr;
-    if (auto ptr = dynamic_cast<constant*>(node)) {
-        value = gen(ptr);
-    } else if (auto ptr = dynamic_cast<unary_op*>(node)) {
-        tac_unary* unary = new tac_unary;
-        unary->op = ptr->type;
-        //recursive call so that the inner most node is created first
-        unary->src = gen(ptr->exp_ptr, body);
-        unary->dst = make_temp_var();
-        value = unary->dst;
-        temp_vars.push_back(unary->dst);
-        body.push_back(unary);
-    }
-    return value;
+tac_val* TAC_AST::gen(unary_op* node, std::vector<tac_instruction*>& body){
+    tac_unary* unary = new tac_unary;
+    unary->op = node->type;
+    expression* exp_ptr = node->exp_ptr;
+    //recursive call so that the inner most node is created first
+    unary->src = exp_ptr->gen(this, body);
+    unary->dst = make_temp_var();
+    temp_vars.push_back(unary->dst);
+    body.push_back(unary);
+    return unary->dst;
 }
 
 tac_constant* TAC_AST::gen(constant* node){

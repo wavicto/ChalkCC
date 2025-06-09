@@ -5,13 +5,13 @@
 #include "asm_visitor.hpp"
 #include <vector>
 
-//register names in AST are size agnostic
+//register names, size agnostic
 enum Reg {
     AX,
     R10
 };
 
-enum unary_op {
+enum unary_operator {
     Not,
     Neg
 };
@@ -55,7 +55,7 @@ class asm_ret : public asm_instruction {
 class asm_unary : public asm_instruction {
     public:
     virtual void accept(asm_visitor* v) override;
-    unary_op op;
+    unary_operator op;
     asm_operand* operand_ptr;
 };
 

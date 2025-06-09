@@ -15,56 +15,62 @@ void ASM_AST::asm_gen(){
     generator.visit(this->root);
 }
 
-asm_program* ASM_AST::gen(program* node){
+asm_program* ASM_AST::gen(tac_program* node){
     asm_program* root = new asm_program;
-    function* ptr = node->func_ptr;
+    tac_function* ptr = node->func_ptr;
     if (ptr){
-        root->ptr = gen(ptr);
+        root->func_ptr = gen(ptr);
     }
     return root;
 }
 
-asm_function* ASM_AST::gen(function* node){
+asm_function* ASM_AST::gen(tac_function* node){
     asm_function* func = new asm_function;
-    statement* state = node->state_ptr;
-
-    if(state){
-        expression* exp = state->exp_ptr;
-        if (exp){
-            func->instructions.push_back(gen(exp));
-        }
-        func->instructions.push_back(gen(state));
+    func->name = node->id;
+    for (auto& instruction : node->body){
+        instruction->gen(this, func->instructions);
     }
-    func->name = node->name;
     return func;
 }
 
-asm_instruction* ASM_AST::gen(statement* node){
-    asm_instruction* ptr = new asm_instruction;
-    ptr->ptr = new asm_ret;
-    return ptr;
-}
-
-asm_instruction* ASM_AST::gen(expression* node){
-    asm_instruction* ptr = new asm_instruction;
+void ASM_AST::gen(tac_return* node, std::vector <asm_instruction*> &instructions) {
     asm_mov* mov = new asm_mov;
-
-    ptr->ptr = mov;
-
-    asm_operand* src = new asm_operand;
-    asm_operand* dst = new asm_operand;
-
-    mov->src = src;
+    tac_val* val = node->val_ptr;
+    mov->src = val->gen(this);
+    asm_reg* dst = new asm_reg;
+    dst->name = AX;
     mov->dst = dst;
 
-    asm_imm* v = new asm_imm;
-    v->value = node->ptr->value;
-    asm_reg* r = new asm_reg;
-    r->name = EAX;
+    instructions.push_back(mov);
+    instructions.push_back(new asm_ret);
+}
 
-    src->ptr = v;
-    dst->ptr = r;
+void ASM_AST::gen(tac_unary* node, std::vector <asm_instruction*> &instructions){
+    asm_mov* mov = new asm_mov;
+    tac_val* src = node->src;
+    tac_val* dst = node->dst;
+    mov->src = src->gen(this);
+    mov->dst = dst->gen(this);
+    
+    instructions.push_back(mov);
 
-    return ptr;
+}
 
+
+/*
+Unary(unary_operator, src, dst)
+    Mov(src, dst)
+    Unary(unary_operator, dst)
+*/
+
+asm_operand* ASM_AST::gen(tac_constant* node){
+    asm_imm* literal = new asm_imm;
+    literal->value = node->value;
+    return literal;
+}
+
+asm_operand* ASM_AST::gen(tac_var* node){
+    asm_pseudo_reg* r = new asm_pseudo_reg;
+    r->id = node->name;
+    return r;
 }

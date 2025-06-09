@@ -5,6 +5,8 @@
 #include <vector>
 #include "token.hpp"
 #include "tac_visitor.hpp"
+#include "asm_node.hpp"
+#include "codegen.hpp"
 
 class TACNode {
     public:
@@ -30,11 +32,13 @@ class tac_function : public TACNode {
 class tac_instruction : public TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
+    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) = 0;
 };
 
 class tac_return : public tac_instruction {
     public:
     virtual void accept(tac_visitor* v) override;
+    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) override;
 
     tac_val* val_ptr;
 };
@@ -42,6 +46,7 @@ class tac_return : public tac_instruction {
 class tac_unary : public tac_instruction {
     public:
     virtual void accept(tac_visitor* v) override;
+    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) override;
 
     TokenType op;
     tac_val* src;
@@ -52,11 +57,13 @@ class tac_unary : public tac_instruction {
 class tac_val : public TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
+    virtual asm_operand* gen(ASM_AST* tree) = 0;
 };
 
 class tac_constant : public tac_val {
     public:
     virtual void accept(tac_visitor* v) override;
+    virtual asm_operand* gen(ASM_AST* tree) override;
 
     int value;
 };
@@ -64,6 +71,7 @@ class tac_constant : public tac_val {
 class tac_var : public tac_val {
     public:
     virtual void accept(tac_visitor* v) override;
+    virtual asm_operand* gen(ASM_AST* tree) override;
 
     std::string name;
 };

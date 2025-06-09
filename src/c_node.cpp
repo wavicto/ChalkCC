@@ -21,3 +21,11 @@ void unary_op::accept(c_visitor* v){
 void constant::accept(c_visitor* v){
     v->visit(this);
 }
+
+tac_val* constant::gen(TAC_AST* tree, std::vector<tac_instruction*>& body){
+    return tree->gen(this);
+}
+
+tac_val* unary_op::gen(TAC_AST* tree, std::vector<tac_instruction*>& body){
+    return tree->gen(this, body);
+}
