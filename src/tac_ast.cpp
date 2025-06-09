@@ -12,6 +12,10 @@ TAC_AST::TAC_AST(AST &tree)
     root = gen(tree.get_root());
 }
 
+tac_program* TAC_AST::get_root(){
+    return root;
+}
+
 void TAC_AST::clean_temp_var(){
     for (auto ptr : temp_vars){
         delete ptr;

@@ -1,6 +1,6 @@
 #include "codegen.hpp"
 
-ASM_AST::ASM_AST(AST &tree)
+ASM_AST::ASM_AST(TAC_AST &tree)
 {
     root = gen(tree.get_root());
 }
@@ -51,17 +51,18 @@ void ASM_AST::gen(tac_unary* node, std::vector <asm_instruction*> &instructions)
     tac_val* dst = node->dst;
     mov->src = src->gen(this);
     mov->dst = dst->gen(this);
-    
+
+    asm_unary* unary_ptr = new asm_unary;
+    if (node->op == Complement){
+        unary_ptr->op = Not;
+    }
+    else if (node->op == Negation){
+        unary_ptr->op = Neg;
+    }
+    unary_ptr->operand_ptr = mov->dst;
     instructions.push_back(mov);
-
+    instructions.push_back(unary_ptr);
 }
-
-
-/*
-Unary(unary_operator, src, dst)
-    Mov(src, dst)
-    Unary(unary_operator, dst)
-*/
 
 asm_operand* ASM_AST::gen(tac_constant* node){
     asm_imm* literal = new asm_imm;

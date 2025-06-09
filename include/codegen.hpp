@@ -8,7 +8,7 @@
 class ASM_AST {
     public:
 
-    ASM_AST(AST &tree);
+    ASM_AST(TAC_AST &tree);
 
     ~ASM_AST();
 

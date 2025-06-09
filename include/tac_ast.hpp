@@ -18,6 +18,8 @@ class TAC_AST {
 
     void print();
 
+    tac_program* get_root(); 
+
     private:
     tac_program* root;
     int temp_var_count;
