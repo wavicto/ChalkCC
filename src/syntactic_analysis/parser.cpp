@@ -1,4 +1,4 @@
-#include "parser.hpp"
+#include "syntactic_analysis/parser.hpp"
 
 AST::AST(std::vector<Token>& tokens)
     :root(new program)
@@ -9,7 +9,8 @@ AST::AST(std::vector<Token>& tokens)
     catch (const std::runtime_error& e) {
         std::cerr << "Parser error: " << e.what() << std::endl;
         std::exit(1);
-    }}
+    }
+}
 
 AST::~AST(){
     c_cleaner worker;

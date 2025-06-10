@@ -1,5 +1,5 @@
-#include "c_visitor.hpp"
-#include "c_node.hpp"
+#include "syntactic_analysis/c_visitor.hpp"
+#include "syntactic_analysis/c_node.hpp"
 
 c_visitor::~c_visitor() {}
 

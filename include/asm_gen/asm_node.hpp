@@ -2,10 +2,10 @@
 #define ASM_NODE_HPP
 
 #include <string>
-#include "asm_visitor.hpp"
 #include <vector>
+#include "asm_gen/asm_visitor.hpp"
 
-//register names, size agnostic
+//Register names, size agnostic
 enum Reg {
     AX,
     R10

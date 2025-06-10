@@ -6,7 +6,7 @@
 #include <vector>
 #include <regex>
 #include <string>
-#include "token.hpp"
+#include "lexical_analysis/token.hpp"
 
 class lexer {
     public:

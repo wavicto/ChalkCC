@@ -3,12 +3,12 @@
 
 #include <string>
 #include <vector>
-#include "token.hpp"
-#include "tac_visitor.hpp"
-#include "asm_node.hpp"
-#include "codegen.hpp"
+#include "lexical_analysis/token.hpp"
+#include "ir_gen/tac_visitor.hpp"
+#include "asm_gen/asm_node.hpp"
+#include "asm_gen/codegen.hpp"
 
-//forward declaration
+//Forward declaration
 class ASM_AST;
 
 class TACNode {
@@ -35,6 +35,7 @@ class tac_function : public TACNode {
 class tac_instruction : public TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
+    //Asists ASM_AST generation through polymorphism on children classes
     virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) = 0;
 };
 
@@ -60,6 +61,7 @@ class tac_unary : public tac_instruction {
 class tac_val : public TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
+    //Asists ASM_AST generation through polymorphism on children classes
     virtual asm_operand* gen(ASM_AST* tree) = 0;
 };
 

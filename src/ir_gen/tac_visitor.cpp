@@ -1,5 +1,5 @@
-#include "tac_visitor.hpp"
-#include "tac_node.hpp"
+#include "ir_gen/tac_visitor.hpp"
+#include "ir_gen/tac_node.hpp"
 
 tac_visitor::~tac_visitor(){}
 
@@ -41,7 +41,6 @@ void tac_cleaner::visit(tac_constant* node){
     delete node;
 }
 
-//Temp vars will be cleaned up all together in a private method in TAC_AST
 void tac_cleaner::visit(tac_var* node){}
 
 void tac_printer::visit(tac_program* node) {

@@ -1,4 +1,4 @@
-#include "asm_node.hpp"
+#include "asm_gen/asm_node.hpp"
 
 ASMNode::~ASMNode(){}
 

@@ -4,10 +4,10 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include "lexer.hpp"
-#include "parser.hpp"
-#include "tac_ast.hpp"
-#include "codegen.hpp"
+#include "lexical_analysis/lexer.hpp"
+#include "syntactic_analysis/parser.hpp"
+#include "ir_gen/tac_ast.hpp"
+#include "asm_gen/codegen.hpp"
 
     /*
     Command line options:
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     std::string directory = input_path.parent_path().string();
     std::string name = input_path.stem().string();
 
-    //compiles the preprocessed file and outputs an assembly file
+    //Compiles the preprocessed file and outputs an assembly file
     lexer lex = lexer();
     std::vector<Token> tokens = lex.extract(preprocessed_file);
     AST tree(tokens);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     ASM_AST a(IR);
     a.asm_gen();
 
-    //produce an executable file
+    //Produce an executable file
     std::string assemble_link = "gcc assembly.s -o " + directory + "/" + name;
 
     system(assemble_link.c_str());

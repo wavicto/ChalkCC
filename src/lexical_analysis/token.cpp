@@ -1,4 +1,4 @@
-#include "token.hpp"
+#include "lexical_analysis/token.hpp"
 
 Token::Token(TokenType t) 
     : type(t), value(0), name("") {

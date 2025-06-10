@@ -4,8 +4,8 @@ CXXFLAGS ?= --std=c++17 -Wall -Werror -pedantic -g -Wno-sign-compare -Wno-commen
 CXXFLAGS += -fsanitize=address -fsanitize=undefined
 CPPFLAGS = -Iinclude
 
-# Automatically include all source files in src/
-SRCS := $(wildcard src/*.cpp)
+# Recursively include all .cpp source files under src/
+SRCS := $(shell find src -name '*.cpp')
 
 # Target executable
 TARGET = compile

@@ -25,6 +25,7 @@ class tac_visitor {
     virtual ~tac_visitor();
 };
 
+//Cleans up dynamically allocated TAC_AST nodes
 class tac_cleaner : public tac_visitor {
     public:
     virtual void visit(tac_program* node) override;
@@ -35,6 +36,7 @@ class tac_cleaner : public tac_visitor {
     virtual void visit(tac_var* node) override;
 };
 
+//Prints TAC_AST structure
 class tac_printer : public tac_visitor {
     public:
     virtual void visit(tac_program* node) override;

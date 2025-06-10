@@ -3,11 +3,11 @@
 
 #include <string>
 #include <iostream>
-#include "c_visitor.hpp"
-#include "tac_node.hpp"
-#include "tac_ast.hpp"
+#include "syntactic_analysis/c_visitor.hpp"
+#include "ir_gen/tac_node.hpp"
+#include "ir_gen/tac_ast.hpp"
 
-//forward declaration for tac generation
+//Forward declaration
 class TAC_AST;
 
 class ASTNode {
@@ -41,6 +41,7 @@ class statement: public ASTNode {
 class expression: public ASTNode {
     public:
     virtual void accept(c_visitor* v) = 0;
+    //Asists with tac IR generation through polymorphism
     virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) = 0;
 };
 

@@ -1,7 +1,7 @@
 #ifndef C_VISITOR_HPP
 #define C_VISITOR_HPP
 
-#include "token.hpp"
+#include "lexical_analysis/token.hpp"
 
 //forward declaration
 class program;
@@ -21,7 +21,7 @@ class c_visitor {
     virtual ~c_visitor();
 };
 
-//cleans up C AST nodes
+//Cleans up C AST nodes
 class c_cleaner : public c_visitor {
     public:
     void visit(program* node) override;
@@ -31,7 +31,7 @@ class c_cleaner : public c_visitor {
     void visit(unary_op* node) override;
 };
 
-//prints C AST structure
+//Prints C AST structure
 class c_printer : public c_visitor {
     public:
     void visit(program* node) override;

@@ -1,4 +1,4 @@
-#include "lexer.hpp"
+#include "lexical_analysis/lexer.hpp"
 
 std::regex lexer::id("[a-zA-Z_]\\w*\\b");
 std::regex lexer::constant("[0-9]+\\b");

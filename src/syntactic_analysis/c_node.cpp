@@ -1,4 +1,4 @@
-#include "c_node.hpp"
+#include "syntactic_analysis/c_node.hpp"
 
 ASTNode::~ASTNode(){}
 

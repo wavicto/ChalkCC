@@ -1,26 +1,28 @@
 #ifndef PARSER_HPP    
 #define PARSER_HPP
 
-#include "lexer.hpp"
-#include "c_node.hpp"
+#include "lexical_analysis/lexer.hpp"
+#include "syntactic_analysis/c_node.hpp"
 
 class AST {
     public:
 
+    //Initializes C AST
     AST(std::vector<Token>& tokens);
 
     ~AST();
 
-    //prints the C AST
+    //Prints the C AST structure
     void print();
 
-    //retruns the root program node
+    //RETURNS: the root program node
     program* get_root();
 
 
     private:
     program* root;
 
+    //Heper functions used to generate AST from tokens
     function* parse_function(std::vector<Token>& tokens);
     statement* parse_statement(std::vector<Token>& token);
     expression* parse_expression(std::vector<Token>& tokens);

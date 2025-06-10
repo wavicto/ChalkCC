@@ -1,24 +1,26 @@
 #ifndef CODEGEN_HPP    
 #define CODEGEN_HPP
 
-#include "asm_node.hpp"
-#include "asm_visitor.hpp"
 #include <unordered_map>
-#include "tac_node.hpp"
+#include "asm_gen/asm_node.hpp"
+#include "asm_gen/asm_visitor.hpp"
+#include "ir_gen/tac_node.hpp"
 
-//forward declaration
+//Forward declaration
 class TAC_AST;
 
 class ASM_AST {
     public:
 
+    //Initalizes ASM_AST from TAC_AST
     ASM_AST(TAC_AST &tree);
 
     ~ASM_AST();
 
-    //generates asm from AST
+    //Generates assembly from ASM_AST
     void asm_gen();
 
+    //Returns: map of pseudo registers with their respective stack_offset
     std::unordered_map<asm_pseudo_reg*, int> get_pseudo_map();
 
     private:
@@ -26,8 +28,10 @@ class ASM_AST {
     int stack_offset;
     std::unordered_map<asm_pseudo_reg*, int> pseudo_map;
     
+    //Cleans up pseudo registers after they are replaced by a stack location
     void clean_map();
 
+    //Helper functions that generates ASM_AST by traversing through TAC_AST
     asm_program* gen(tac_program* node);
     asm_function* gen(tac_function* node);
     void gen(tac_return* node, std::vector <asm_instruction*> &instructions);
@@ -35,6 +39,7 @@ class ASM_AST {
     asm_operand* gen(tac_constant* node);
     asm_operand* gen(tac_var* node);
 
+    //Asists with ASM_AST generatoin
     friend class tac_return;
     friend class tac_unary;
     friend class tac_constant;
