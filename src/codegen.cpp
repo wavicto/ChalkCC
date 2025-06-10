@@ -1,8 +1,20 @@
 #include "codegen.hpp"
+#include "tac_ast.hpp"
 
 ASM_AST::ASM_AST(TAC_AST &tree)
+    :stack_offset(0)
 {
+    //generates inital structure
     root = gen(tree.get_root());
+
+    //first compiler pass that sets pseudo registers to stack locations
+    asm_pseudo_locator locator(pseudo_map);
+    locator.visit(root);
+    clean_map();
+
+    //second compiler pass that finalizes the assembly instructions
+    asm_instruction_finalizer finalizer(stack_offset);
+    finalizer.visit(root);
 }
 
 ASM_AST::~ASM_AST(){
@@ -13,6 +25,16 @@ ASM_AST::~ASM_AST(){
 void ASM_AST::asm_gen(){
     asm_generator generator;
     generator.visit(this->root);
+}
+
+std::unordered_map<asm_pseudo_reg*, int> ASM_AST::get_pseudo_map(){
+    return pseudo_map;
+}
+
+void ASM_AST::clean_map(){
+    for (auto &ptr : pseudo_map){
+        delete ptr.first;
+    }
 }
 
 asm_program* ASM_AST::gen(tac_program* node){
@@ -73,5 +95,7 @@ asm_operand* ASM_AST::gen(tac_constant* node){
 asm_operand* ASM_AST::gen(tac_var* node){
     asm_pseudo_reg* r = new asm_pseudo_reg;
     r->id = node->name;
+    stack_offset -= 4;
+    pseudo_map[r] = stack_offset;
     return r;
 }

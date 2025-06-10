@@ -6,6 +6,7 @@
 #include <vector>
 #include "lexer.hpp"
 #include "parser.hpp"
+#include "tac_ast.hpp"
 #include "codegen.hpp"
 
     /*
@@ -64,7 +65,8 @@ int main(int argc, char *argv[]) {
             lexer lex = lexer();
             std::vector<Token> tokens = lex.extract(preprocessed_file);
             AST tree(tokens);
-            ASM_AST a(tree);
+            TAC_AST IR(tree);
+            ASM_AST a(IR);
             a.asm_gen();
             system("rm preprocessed_file.i");
             return 0;
@@ -83,7 +85,8 @@ int main(int argc, char *argv[]) {
     lexer lex = lexer();
     std::vector<Token> tokens = lex.extract(preprocessed_file);
     AST tree(tokens);
-    ASM_AST a(tree);
+    TAC_AST IR(tree);
+    ASM_AST a(IR);
     a.asm_gen();
 
     //produce an executable file

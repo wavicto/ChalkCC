@@ -30,7 +30,7 @@ void tac_return::gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions
     tree->gen(this, instructions);
 }
 
-void tac_return::gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions){
+void tac_unary::gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions){
     tree->gen(this, instructions);
 }
 

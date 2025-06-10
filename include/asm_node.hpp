@@ -62,7 +62,7 @@ class asm_unary : public asm_instruction {
 class allocate_stack : public asm_instruction {
     public:
     virtual void accept(asm_visitor* v) override;
-    int bytes;
+    int size;
 };
 
 class asm_operand : public ASMNode {

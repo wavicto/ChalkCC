@@ -10,19 +10,26 @@ void asm_function::accept(asm_visitor* v){
     v->visit(this);
 }
 
-void asm_instruction::accept(asm_visitor* v){
-    v->visit(this);
-}
-
 void asm_mov::accept(asm_visitor* v){
     v->visit(this);
 }
 
-void asm_ret::accept(asm_visitor* v){
+void allocate_stack::accept(asm_visitor* v){
     v->visit(this);
 }
 
-void asm_operand::accept(asm_visitor* v){
+void asm_pseudo_reg::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void stack_location::accept(asm_visitor* v){
+    v->visit(this);
+}
+
+void asm_unary::accept(asm_visitor* v){
+    v->visit(this);
+}
+void asm_ret::accept(asm_visitor* v){
     v->visit(this);
 }
 

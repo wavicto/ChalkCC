@@ -8,6 +8,9 @@
 #include "asm_node.hpp"
 #include "codegen.hpp"
 
+//forward declaration
+class ASM_AST;
+
 class TACNode {
     public:
     virtual void accept(tac_visitor* v) = 0;
