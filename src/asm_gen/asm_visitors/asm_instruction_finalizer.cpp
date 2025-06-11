@@ -21,6 +21,7 @@ void asm_instruction_finalizer::visit(asm_function* node) {
             ptr->accept(this);
         }
     }
+    //Adds allocate stack instruction
     instructions->insert(instructions->begin(), stack_allocator);
 }
 
@@ -28,6 +29,8 @@ void asm_instruction_finalizer::visit(asm_mov* node) {
     auto src = dynamic_cast<stack_location*>(node->src);
     auto dst = dynamic_cast<stack_location*>(node->dst);
 
+    //Determines if the mov instruction has both operands as stack locations
+    //If so, remove said mov instruction and then adds two new mov instructions using R10D as scratch reg
     if (src != nullptr && dst != nullptr){
         asm_reg* scratch_one = new asm_reg;
         scratch_one->name = R10;

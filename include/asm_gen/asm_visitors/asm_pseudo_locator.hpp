@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
-//Compiler pass that asssigns memory location for pseudo registers
+//Second compiler pass that asssigns memory location for pseudo registers
 class asm_pseudo_locator: public asm_visitor {
     public:
     virtual void visit(asm_program* node) override;

@@ -19,6 +19,8 @@ void asm_pseudo_locator::visit(asm_function* node) {
     }
 }
 
+//Replaces pseudo registers with an actual stack location
+//Pseudo register dynamic memory is handled by the ASM_AST as a whole
 void asm_pseudo_locator::visit(asm_mov* node) {
     asm_operand* src = node->src;
     asm_operand* dst = node->dst;

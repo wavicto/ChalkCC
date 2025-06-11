@@ -24,7 +24,7 @@ class AST {
     private:
     program* root;
 
-    //Heper functions used to generate AST from tokens
+    //Heper functions used to generate C AST from tokens
     function* parse_function(std::vector<Token>& tokens);
     statement* parse_statement(std::vector<Token>& token);
     expression* parse_expression(std::vector<Token>& tokens);

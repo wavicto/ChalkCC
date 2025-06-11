@@ -11,6 +11,7 @@
 class lexer {
     public:
 
+    //Initalizes lexer
     lexer();
 
     //RETURNS: a vector of tokens from a file
@@ -19,7 +20,7 @@ class lexer {
     //MODIFIES: determines all possible tokens from "token" and adds it to list 
     void tokenize(std::vector<Token> &list, std::string token);
 
-    //MODIFIES: adds token to a list
+    //MODIFIES: helper that adds token to a list
     void token_adder(std::vector<Token> &list, std::string token);
 
     //RETURNS: determines if token matches to any regex

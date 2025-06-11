@@ -19,5 +19,3 @@ $(TARGET): $(SRCS)
 # Clean rule
 clean:
 	rm -f $(TARGET)
-
-.PHONY: all clean

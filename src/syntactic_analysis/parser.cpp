@@ -13,13 +13,13 @@ AST::AST(std::vector<Token>& tokens)
 }
 
 AST::~AST(){
-    c_cleaner worker;
-    worker.visit(this->root);
+    c_cleaner cleaner;
+    cleaner.visit(this->root);
 }
 
 void AST::print(){
-    c_printer person;
-    person.visit(this->root);
+    c_printer printer;
+    printer.visit(this->root);
 }
 
 program* AST::get_root(){
@@ -116,7 +116,6 @@ unary_op* AST::parse_unary(std::vector<Token>& tokens){
 
 constant* AST::parse_constant(std::vector<Token>& tokens){
     constant* c = new constant;
-
     c->value = tokens[0].get_value();
     return c;
 }

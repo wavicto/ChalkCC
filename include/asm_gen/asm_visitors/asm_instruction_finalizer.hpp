@@ -4,6 +4,7 @@
 #include <vector>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
+//Class for third compiler pass
 //Allocates stack size
 //Fixes mov instructions that have both operands as stack locations using R10D as a scratch register
 class asm_instruction_finalizer: public asm_visitor {

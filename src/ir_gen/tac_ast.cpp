@@ -46,7 +46,7 @@ tac_val* TAC_AST::gen(unary_op* node, std::vector<tac_instruction*>& body){
     tac_unary* unary = new tac_unary;
     unary->op = node->type;
     expression* exp_ptr = node->exp_ptr;
-    //recursive call so that the inner most node is created first
+    //Recursive call so that the inner most node is created first
     unary->src = exp_ptr->gen(this, body);
     unary->dst = make_temp_var();
     temp_vars.push_back(unary->dst);

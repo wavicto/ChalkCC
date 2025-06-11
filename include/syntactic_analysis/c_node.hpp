@@ -40,7 +40,7 @@ class statement: public ASTNode {
 class expression: public ASTNode {
     public:
     virtual void accept(c_visitor* v) = 0;
-    //Asists with tac IR generation through polymorphism
+    //Asists with TAC_AST generation through polymorphism
     virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) = 0;
 };
 

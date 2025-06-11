@@ -24,6 +24,7 @@ enum TokenType {
 class Token {
     public:
 
+    //Initalizes tokens
     Token(TokenType t);
 
     //Initalizes Constants
@@ -48,11 +49,10 @@ class Token {
     bool expect(TokenType expected);
 
     private:
-    
+
     TokenType type;
     int value;
     std::string name;
-
 };
 
 #endif

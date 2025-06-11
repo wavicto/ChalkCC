@@ -24,6 +24,7 @@ class ASM_AST {
     void asm_gen();
 
     //Returns: map of pseudo registers with their respective stack_offset
+    //Helper method for second compiler pass that allocates stack locations for pseudo registers
     std::unordered_map<asm_pseudo_reg*, int> get_pseudo_map();
 
     private:

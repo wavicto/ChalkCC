@@ -4,15 +4,15 @@
 ASM_AST::ASM_AST(TAC_AST &tree)
     :stack_offset(0)
 {
-    //Generates inital structure
+    //First compiler pass that generates inital structure
     root = gen(tree.get_root());
 
-    //First compiler pass that sets pseudo registers to stack locations
+    //Second compiler pass that sets pseudo registers to actual stack locations
     asm_pseudo_locator locator(pseudo_map);
     locator.visit(root);
     clean_map();
 
-    //Second compiler pass that finalizes the assembly instructions
+    //Third compiler pass that finalizes the assembly instructions
     asm_instruction_finalizer finalizer(stack_offset);
     finalizer.visit(root);
 }
@@ -93,6 +93,8 @@ asm_operand* ASM_AST::gen(tac_constant* node){
 }
 
 asm_operand* ASM_AST::gen(tac_var* node){
+    //Checks to see if the tac_var has been previously assigned a pseudo register
+    //Due to how tac_var nodes can be shared by multiple tac_instructions
     for (auto &element : pseudo_map){
         if ((element.first)->id == node->name){
             return element.first;

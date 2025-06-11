@@ -39,4 +39,5 @@ void tac_cleaner::visit(tac_constant* node){
     delete node;
 }
 
+//temp variables will be cleaned up in another method
 void tac_cleaner::visit(tac_var* node){}
