@@ -10,39 +10,39 @@
 //Forward declaration
 class AST;
 
-class TAC_AST {
+class TacAST {
     public:
 
-    //Initalizes TAC_AST from C AST
-    TAC_AST(AST &tree);
+    //Initalizes TacAST from C AST
+    TacAST(AST &tree);
 
-    ~TAC_AST();
+    ~TacAST();
 
-    //Prints TAC_AST structure
+    //Prints TacAST structure
     void print();
 
-    //RETURNS: the root of TAC_AST structure
-    tac_program* get_root(); 
+    //RETURNS: the root of TacAST structure
+    TacProgram* get_root(); 
 
     private:
-    tac_program* root;
+    TacProgram* root;
     int temp_var_count;
-    std::vector <tac_val*> temp_vars;
+    std::vector <TacVal*> temp_vars;
 
-    //Helper functions to generate TAC_AST from C_AST traversal
-    tac_program* gen(program* node);
-    tac_function* gen(function* node);
-    void gen(statement* node, std::vector<tac_instruction*>& body);
-    tac_val* gen(unary_op* node, std::vector<tac_instruction*>& body);
-    tac_constant* gen(constant* node);
+    //Helper functions to generate TacAST from C AST traversal
+    TacProgram* gen(Program* node);
+    TacFunction* gen(Function* node);
+    void gen(Statement* node, std::vector<TacInstruction*>& body);
+    TacVal* gen(UnaryOp* node, std::vector<TacInstruction*>& body);
+    TacConstant* gen(Constant* node);
 
-    tac_var* make_temp_var();
-    //MODIFIES: clean up temp_vars as its nodes can be shared among multiple tac_instructions
+    TacVar* make_temp_var();
+    //MODIFIES: clean up temp_vars as its nodes can be shared among multiple TacInstructions
     void clean_temp_var();
 
-    //Asists with TAC_AST generation
-    friend class constant;
-    friend class unary_op;
+    //Asists with TacAST generation
+    friend class Constant;
+    friend class UnaryOp;
 };
 
 #endif

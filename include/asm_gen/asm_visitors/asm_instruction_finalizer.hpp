@@ -7,24 +7,24 @@
 //Class for third compiler pass
 //Allocates stack size
 //Fixes mov instructions that have both operands as stack locations using R10D as a scratch register
-class asm_instruction_finalizer: public asm_visitor {
+class AsmInstructionFinalizer: public AsmVisitor {
     public:
-    virtual void visit(asm_program* node) override;
-    virtual void visit(asm_function* node) override;
-    virtual void visit(asm_mov* node) override;
-    virtual void visit(asm_ret* node) override;
-    virtual void visit(asm_unary* node) override;
-    virtual void visit(allocate_stack* node) override;
-    virtual void visit(asm_reg* node) override;
-    virtual void visit(asm_imm* node) override;
-    virtual void visit(asm_pseudo_reg* node) override;
-    virtual void visit(stack_location* node) override;
+    virtual void visit(AsmProgram* node) override;
+    virtual void visit(AsmFunction* node) override;
+    virtual void visit(AsmMov* node) override;
+    virtual void visit(AsmRet* node) override;
+    virtual void visit(AsmUnary* node) override;
+    virtual void visit(StackAllocate* node) override;
+    virtual void visit(AsmReg* node) override;
+    virtual void visit(AsmImm* node) override;
+    virtual void visit(AsmPseudoReg* node) override;
+    virtual void visit(StackLocation* node) override;
 
-    asm_instruction_finalizer(int size);
+    AsmInstructionFinalizer(int size);
 
     private:
     int stack_size;
-    std::vector <asm_instruction*> *instructions;
+    std::vector <AsmInstruction*> *instructions;
 };
 
 #endif

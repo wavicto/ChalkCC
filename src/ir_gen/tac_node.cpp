@@ -1,43 +1,43 @@
 #include "ir_gen/tac_node.hpp"
 
-TACNode::~TACNode(){}
+TacNode::~TacNode(){}
 
-void tac_program::accept(tac_visitor* v) {
+void TacProgram::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_function::accept(tac_visitor* v) {
+void TacFunction::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_return::accept(tac_visitor* v) {
+void TacReturn::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_unary::accept(tac_visitor* v) {
+void TacUnary::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_constant::accept(tac_visitor* v) {
+void TacConstant::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_var::accept(tac_visitor* v) {
+void TacVar::accept(TacVisitor* v) {
     v->visit(this);
 }
 
-void tac_return::gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions){
+void TacReturn::gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions){
     tree->gen(this, instructions);
 }
 
-void tac_unary::gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions){
+void TacUnary::gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions){
     tree->gen(this, instructions);
 }
 
-asm_operand* tac_constant::gen(ASM_AST* tree){
+AsmOperand* TacConstant::gen(AsmAST* tree){
     return tree->gen(this);
 }
 
-asm_operand* tac_var::gen(ASM_AST* tree){
+AsmOperand* TacVar::gen(AsmAST* tree){
     return tree->gen(this);
 }

@@ -1,15 +1,15 @@
 #include "asm_gen/asm_visitors/asm_cleaner.hpp"
 #include "asm_gen/asm_node.hpp"
 
-void asm_cleaner::visit(asm_program* node){
-    asm_function* ptr = node->func_ptr;
+void AsmCleaner::visit(AsmProgram* node){
+    AsmFunction* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
     delete node;
 }
 
-void asm_cleaner::visit(asm_function* node){
+void AsmCleaner::visit(AsmFunction* node){
     for (auto ptr : node->instructions){
         if (ptr){
             ptr->accept(this);
@@ -18,9 +18,9 @@ void asm_cleaner::visit(asm_function* node){
     delete node;
 }
 
-void asm_cleaner::visit(asm_mov* node){
-    asm_operand* src = node->src;
-    asm_operand* dst = node->dst;
+void AsmCleaner::visit(AsmMov* node){
+    AsmOperand* src = node->src;
+    AsmOperand* dst = node->dst;
     if (src){
         src->accept(this);
     }
@@ -30,17 +30,17 @@ void asm_cleaner::visit(asm_mov* node){
     delete node;
 }
 
-void asm_cleaner::visit(asm_unary* node){
-    asm_operand* op_ptr = node->operand_ptr;
+void AsmCleaner::visit(AsmUnary* node){
+    AsmOperand* op_ptr = node->operand_ptr;
     if (op_ptr){
         op_ptr->accept(this);
     }
     delete node;
 }
 
-void asm_cleaner::visit(asm_ret* node){delete node;}
-void asm_cleaner::visit(allocate_stack* node){delete node;}
-void asm_cleaner::visit(asm_pseudo_reg* node){delete node;}
-void asm_cleaner::visit(stack_location* node){delete node;}
-void asm_cleaner::visit(asm_reg* node){delete node;}
-void asm_cleaner::visit(asm_imm* node){delete node;}
+void AsmCleaner::visit(AsmRet* node){delete node;}
+void AsmCleaner::visit(StackAllocate* node){delete node;}
+void AsmCleaner::visit(AsmPseudoReg* node){delete node;}
+void AsmCleaner::visit(StackLocation* node){delete node;}
+void AsmCleaner::visit(AsmReg* node){delete node;}
+void AsmCleaner::visit(AsmImm* node){delete node;}

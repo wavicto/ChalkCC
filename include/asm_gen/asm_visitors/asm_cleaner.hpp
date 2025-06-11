@@ -3,19 +3,19 @@
 
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
-//Cleans up ASM AST nodes
-class asm_cleaner : public asm_visitor {
+//Cleans up AsmAST nodes
+class AsmCleaner : public AsmVisitor {
     public:
-    virtual void visit(asm_program* node) override;
-    virtual void visit(asm_function* node) override;
-    virtual void visit(asm_mov* node) override;
-    virtual void visit(asm_ret* node) override;
-    virtual void visit(asm_unary* node) override;
-    virtual void visit(allocate_stack* node) override;
-    virtual void visit(asm_reg* node) override;
-    virtual void visit(asm_imm* node) override;
-    virtual void visit(asm_pseudo_reg* node) override;
-    virtual void visit(stack_location* node) override;
+    virtual void visit(AsmProgram* node) override;
+    virtual void visit(AsmFunction* node) override;
+    virtual void visit(AsmMov* node) override;
+    virtual void visit(AsmRet* node) override;
+    virtual void visit(AsmUnary* node) override;
+    virtual void visit(StackAllocate* node) override;
+    virtual void visit(AsmReg* node) override;
+    virtual void visit(AsmImm* node) override;
+    virtual void visit(AsmPseudoReg* node) override;
+    virtual void visit(StackLocation* node) override;
 };
 
 #endif

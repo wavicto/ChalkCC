@@ -1,17 +1,17 @@
 #include "asm_gen/asm_visitors/asm_pseudo_locator.hpp"
 #include "asm_gen/asm_node.hpp"
 
-asm_pseudo_locator::asm_pseudo_locator(std::unordered_map<asm_pseudo_reg*, int> &map)
+AsmPseudoLocator::AsmPseudoLocator(std::unordered_map<AsmPseudoReg*, int> &map)
     :pseudo_map(map){}
 
-void asm_pseudo_locator::visit(asm_program* node) {
-    asm_function* ptr = node->func_ptr;
+void AsmPseudoLocator::visit(AsmProgram* node) {
+    AsmFunction* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void asm_pseudo_locator::visit(asm_function* node) {
+void AsmPseudoLocator::visit(AsmFunction* node) {
     for (auto ptr : node->instructions){
         if (ptr){
             ptr->accept(this);
@@ -20,12 +20,12 @@ void asm_pseudo_locator::visit(asm_function* node) {
 }
 
 //Replaces pseudo registers with an actual stack location
-//Pseudo register dynamic memory is handled by the ASM_AST as a whole
-void asm_pseudo_locator::visit(asm_mov* node) {
-    asm_operand* src = node->src;
-    asm_operand* dst = node->dst;
-    if (auto pseudo = dynamic_cast<asm_pseudo_reg*>(src)) {
-        stack_location* location = new stack_location;
+//Pseudo register dynamic memory is handled by the AsmAST as a whole
+void AsmPseudoLocator::visit(AsmMov* node) {
+    AsmOperand* src = node->src;
+    AsmOperand* dst = node->dst;
+    if (auto pseudo = dynamic_cast<AsmPseudoReg*>(src)) {
+        StackLocation* location = new StackLocation;
         location->rbp_offset = pseudo_map[pseudo];
         node->src = location;
     }
@@ -33,8 +33,8 @@ void asm_pseudo_locator::visit(asm_mov* node) {
         src->accept(this);
     }
 
-    if (auto pseudo = dynamic_cast<asm_pseudo_reg*>(dst)) {
-        stack_location* location = new stack_location;
+    if (auto pseudo = dynamic_cast<AsmPseudoReg*>(dst)) {
+        StackLocation* location = new StackLocation;
         location->rbp_offset = pseudo_map[pseudo];
         node->dst = location;    
     }
@@ -43,10 +43,10 @@ void asm_pseudo_locator::visit(asm_mov* node) {
     }
 }
 
-void asm_pseudo_locator::visit(asm_unary* node) {
-    asm_operand* operand = node->operand_ptr;
-    if (auto pseudo = dynamic_cast<asm_pseudo_reg*>(operand)) {
-        stack_location* location = new stack_location;
+void AsmPseudoLocator::visit(AsmUnary* node) {
+    AsmOperand* operand = node->operand_ptr;
+    if (auto pseudo = dynamic_cast<AsmPseudoReg*>(operand)) {
+        StackLocation* location = new StackLocation;
         location->rbp_offset = pseudo_map[pseudo];
         node->operand_ptr = location; 
     }
@@ -55,10 +55,10 @@ void asm_pseudo_locator::visit(asm_unary* node) {
     }
 }
 
-void asm_pseudo_locator::visit(asm_ret* node) {}
-void asm_pseudo_locator::visit(allocate_stack* node) {}
-void asm_pseudo_locator::visit(asm_reg* node) {}
-void asm_pseudo_locator::visit(asm_imm* node) {}
-void asm_pseudo_locator::visit(asm_pseudo_reg* node) {}
-void asm_pseudo_locator::visit(stack_location* node) {}
+void AsmPseudoLocator::visit(AsmRet* node) {}
+void AsmPseudoLocator::visit(StackAllocate* node) {}
+void AsmPseudoLocator::visit(AsmReg* node) {}
+void AsmPseudoLocator::visit(AsmImm* node) {}
+void AsmPseudoLocator::visit(AsmPseudoReg* node) {}
+void AsmPseudoLocator::visit(StackLocation* node) {}
 

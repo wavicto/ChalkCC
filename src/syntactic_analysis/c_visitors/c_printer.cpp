@@ -1,39 +1,39 @@
 #include "syntactic_analysis/c_visitors//c_printer.hpp"
 #include "syntactic_analysis/c_node.hpp"
 
-void c_printer::visit(program* node){
+void CPrinter::visit(Program* node){
     std::cout << "Program: " << std::endl;
-    function* ptr = node->func_ptr;
+    Function* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void c_printer::visit(function* node){
+void CPrinter::visit(Function* node){
     std::cout << "Function: Name: " << node->name << std::endl;
-    statement* ptr = node->state_ptr;
+    Statement* ptr = node->state_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void c_printer::visit(statement* node){
+void CPrinter::visit(Statement* node){
     std::cout << "Statement: Return " << std::endl;
-    expression* ptr = node->exp_ptr;
+    Expression* ptr = node->exp_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void c_printer::visit(unary_op* node){
+void CPrinter::visit(UnaryOp* node){
     Token t(node->type);
     std::cout << "Expression: Unary: " << t.get_type_name(t.get_type()) << std::endl;
-    expression* ptr = node->exp_ptr;
+    Expression* ptr = node->exp_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void c_printer::visit(constant* node){
+void CPrinter::visit(Constant* node){
     std::cout << "Expression: Constant(" << node->value << ")" << std::endl;
 }

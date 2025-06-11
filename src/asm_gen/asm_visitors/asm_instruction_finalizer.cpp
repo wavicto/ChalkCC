@@ -1,20 +1,20 @@
 #include "asm_gen/asm_visitors/asm_instruction_finalizer.hpp"
 #include "asm_gen/asm_node.hpp"
 
-asm_instruction_finalizer::asm_instruction_finalizer(int size)
+AsmInstructionFinalizer::AsmInstructionFinalizer(int size)
     : stack_size(size) {}
 
-void asm_instruction_finalizer::visit(asm_program* node) {
-    asm_function* ptr = node->func_ptr;
+void AsmInstructionFinalizer::visit(AsmProgram* node) {
+    AsmFunction* ptr = node->func_ptr;
     if (ptr){
         ptr->accept(this);
     }
 }
 
-void asm_instruction_finalizer::visit(asm_function* node) {
+void AsmInstructionFinalizer::visit(AsmFunction* node) {
     instructions = &(node->instructions);
     auto saved_instructions = *instructions; 
-    allocate_stack* stack_allocator = new allocate_stack;
+    StackAllocate* stack_allocator = new StackAllocate;
     stack_allocator->size = abs(stack_size);
     for (auto ptr : saved_instructions){
         if (ptr){
@@ -25,23 +25,23 @@ void asm_instruction_finalizer::visit(asm_function* node) {
     instructions->insert(instructions->begin(), stack_allocator);
 }
 
-void asm_instruction_finalizer::visit(asm_mov* node) {
-    auto src = dynamic_cast<stack_location*>(node->src);
-    auto dst = dynamic_cast<stack_location*>(node->dst);
+void AsmInstructionFinalizer::visit(AsmMov* node) {
+    auto src = dynamic_cast<StackLocation*>(node->src);
+    auto dst = dynamic_cast<StackLocation*>(node->dst);
 
     //Determines if the mov instruction has both operands as stack locations
     //If so, remove said mov instruction and then adds two new mov instructions using R10D as scratch reg
     if (src != nullptr && dst != nullptr){
-        asm_reg* scratch_one = new asm_reg;
+        AsmReg* scratch_one = new AsmReg;
         scratch_one->name = R10;
-        asm_reg* scratch_two = new asm_reg;
+        AsmReg* scratch_two = new AsmReg;
         scratch_two->name = R10;
 
-        asm_mov* mov_1 = new asm_mov;
+        AsmMov* mov_1 = new AsmMov;
         mov_1->src = node->src;
         mov_1->dst = scratch_one;
     
-        asm_mov* mov_2 = new asm_mov;
+        AsmMov* mov_2 = new AsmMov;
         mov_2->src = scratch_two;
         mov_2->dst = node->dst;
 
@@ -57,10 +57,10 @@ void asm_instruction_finalizer::visit(asm_mov* node) {
     }
 }
 
-void asm_instruction_finalizer::visit(asm_ret* node) {}
-void asm_instruction_finalizer::visit(asm_unary* node) {}
-void asm_instruction_finalizer::visit(allocate_stack* node) {}
-void asm_instruction_finalizer::visit(asm_reg* node) {}
-void asm_instruction_finalizer::visit(asm_imm* node) {}
-void asm_instruction_finalizer::visit(asm_pseudo_reg* node) {}
-void asm_instruction_finalizer::visit(stack_location* node) {}
+void AsmInstructionFinalizer::visit(AsmRet* node) {}
+void AsmInstructionFinalizer::visit(AsmUnary* node) {}
+void AsmInstructionFinalizer::visit(StackAllocate* node) {}
+void AsmInstructionFinalizer::visit(AsmReg* node) {}
+void AsmInstructionFinalizer::visit(AsmImm* node) {}
+void AsmInstructionFinalizer::visit(AsmPseudoReg* node) {}
+void AsmInstructionFinalizer::visit(StackLocation* node) {}

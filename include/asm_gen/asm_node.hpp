@@ -11,86 +11,86 @@ enum Reg {
     R10
 };
 
-enum unary_operator {
+enum UnaryOperator {
     Not,
     Neg
 };
 
-class ASMNode {
+class AsmNode {
     public:
-    virtual void accept(asm_visitor* v) = 0;
-    virtual ~ASMNode();
+    virtual void accept(AsmVisitor* v) = 0;
+    virtual ~AsmNode();
 };
 
-class asm_program : public ASMNode {
+class AsmProgram : public AsmNode {
     public:
-    virtual void accept(asm_visitor* v) override;
-    asm_function* func_ptr;
+    virtual void accept(AsmVisitor* v) override;
+    AsmFunction* func_ptr;
 };
 
-class asm_function : public ASMNode {
+class AsmFunction : public AsmNode {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     std::string name;
-    std::vector <asm_instruction*> instructions;
+    std::vector <AsmInstruction*> instructions;
 };
 
-class asm_instruction : public ASMNode {
+class AsmInstruction : public AsmNode {
     public:
-    virtual void accept(asm_visitor* v) = 0;
+    virtual void accept(AsmVisitor* v) = 0;
 };
 
-class asm_mov : public asm_instruction {
+class AsmMov : public AsmInstruction {
     public:
-    virtual void accept(asm_visitor* v) override;
-    asm_operand* src;
-    asm_operand* dst;
+    virtual void accept(AsmVisitor* v) override;
+    AsmOperand* src;
+    AsmOperand* dst;
 };
 
-class asm_ret : public asm_instruction {
+class AsmRet : public AsmInstruction {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
 };
 
-class asm_unary : public asm_instruction {
+class AsmUnary : public AsmInstruction {
     public:
-    virtual void accept(asm_visitor* v) override;
-    unary_operator op;
-    asm_operand* operand_ptr;
+    virtual void accept(AsmVisitor* v) override;
+    UnaryOperator op;
+    AsmOperand* operand_ptr;
 };
 
-class allocate_stack : public asm_instruction {
+class StackAllocate : public AsmInstruction {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     int size;
 };
 
-class asm_operand : public ASMNode {
+class AsmOperand : public AsmNode {
     public:
-    virtual void accept(asm_visitor* v) override = 0;
+    virtual void accept(AsmVisitor* v) override = 0;
 };
 
-class asm_reg : public asm_operand {
+class AsmReg : public AsmOperand {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     Reg name;
 };
 
-class asm_imm : public asm_operand {
+class AsmImm : public AsmOperand {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     int value;
 };
 
-class asm_pseudo_reg : public asm_operand {
+class AsmPseudoReg : public AsmOperand {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     std::string id;
 };
 
-class stack_location : public asm_operand {
+class StackLocation : public AsmOperand {
     public:
-    virtual void accept(asm_visitor* v) override;
+    virtual void accept(AsmVisitor* v) override;
     int rbp_offset;
 };
 

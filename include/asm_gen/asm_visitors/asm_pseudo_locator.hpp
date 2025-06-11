@@ -5,23 +5,23 @@
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Second compiler pass that asssigns memory location for pseudo registers
-class asm_pseudo_locator: public asm_visitor {
+class AsmPseudoLocator: public AsmVisitor {
     public:
-    virtual void visit(asm_program* node) override;
-    virtual void visit(asm_function* node) override;
-    virtual void visit(asm_mov* node) override;
-    virtual void visit(asm_ret* node) override;
-    virtual void visit(asm_unary* node) override;
-    virtual void visit(allocate_stack* node) override;
-    virtual void visit(asm_reg* node) override;
-    virtual void visit(asm_imm* node) override;
-    virtual void visit(asm_pseudo_reg* node) override;
-    virtual void visit(stack_location* node) override;
+    virtual void visit(AsmProgram* node) override;
+    virtual void visit(AsmFunction* node) override;
+    virtual void visit(AsmMov* node) override;
+    virtual void visit(AsmRet* node) override;
+    virtual void visit(AsmUnary* node) override;
+    virtual void visit(StackAllocate* node) override;
+    virtual void visit(AsmReg* node) override;
+    virtual void visit(AsmImm* node) override;
+    virtual void visit(AsmPseudoReg* node) override;
+    virtual void visit(StackLocation* node) override;
 
-    asm_pseudo_locator(std::unordered_map<asm_pseudo_reg*, int> &map);
+    AsmPseudoLocator(std::unordered_map<AsmPseudoReg*, int> &map);
 
     private:
-    std::unordered_map<asm_pseudo_reg*, int>& pseudo_map;
+    std::unordered_map<AsmPseudoReg*, int>& pseudo_map;
 };
 
 #endif

@@ -1,42 +1,42 @@
 #include "asm_gen/asm_node.hpp"
 
-ASMNode::~ASMNode(){}
+AsmNode::~AsmNode(){}
 
-void asm_program::accept(asm_visitor* v){
+void AsmProgram::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void asm_function::accept(asm_visitor* v){
+void AsmFunction::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void asm_mov::accept(asm_visitor* v){
+void AsmMov::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void allocate_stack::accept(asm_visitor* v){
+void StackAllocate::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void asm_pseudo_reg::accept(asm_visitor* v){
+void AsmPseudoReg::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void stack_location::accept(asm_visitor* v){
+void StackLocation::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void asm_unary::accept(asm_visitor* v){
+void AsmUnary::accept(AsmVisitor* v){
     v->visit(this);
 }
-void asm_ret::accept(asm_visitor* v){
-    v->visit(this);
-}
-
-void asm_reg::accept(asm_visitor* v){
+void AsmRet::accept(AsmVisitor* v){
     v->visit(this);
 }
 
-void asm_imm::accept(asm_visitor* v){
+void AsmReg::accept(AsmVisitor* v){
+    v->visit(this);
+}
+
+void AsmImm::accept(AsmVisitor* v){
     v->visit(this);
 }

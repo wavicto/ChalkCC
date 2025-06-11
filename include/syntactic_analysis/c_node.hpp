@@ -7,58 +7,58 @@
 #include "ir_gen/tac_ast.hpp"
 
 //Forward declaration
-class TAC_AST;
+class TacAST;
 
 class ASTNode {
     public:
-    virtual void accept(c_visitor* v) = 0;
+    virtual void accept(CVisitor* v) = 0;
     virtual ~ASTNode();
 };
 
-class program : public ASTNode {
+class Program : public ASTNode {
     public:
-    virtual void accept(c_visitor* v) override;
+    virtual void accept(CVisitor* v) override;
 
-    function* func_ptr;
+    Function* func_ptr;
 };
 
-class function : public ASTNode {
+class Function : public ASTNode {
     public:
-    virtual void accept(c_visitor* v) override;
+    virtual void accept(CVisitor* v) override;
 
-    statement* state_ptr;
+    Statement* state_ptr;
     std::string name;
 };
 
-class statement: public ASTNode {
+class Statement: public ASTNode {
     public:
-    virtual void accept(c_visitor* v) override;
+    virtual void accept(CVisitor* v) override;
 
-    expression* exp_ptr;
+    Expression* exp_ptr;
 };
 
-class expression: public ASTNode {
+class Expression: public ASTNode {
     public:
-    virtual void accept(c_visitor* v) = 0;
+    virtual void accept(CVisitor* v) = 0;
     //Asists with TAC_AST generation through polymorphism
-    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) = 0;
+    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) = 0;
 };
 
-class constant : public expression {
+class Constant : public Expression {
     public:
-    virtual void accept(c_visitor* v) override;
-    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) override;
+    virtual void accept(CVisitor* v) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
 
     int value;
 };
 
-class unary_op : public expression {
+class UnaryOp : public Expression {
     public:
-    virtual void accept(c_visitor* v) override;
-    virtual tac_val* gen(TAC_AST* tree, std::vector<tac_instruction*>& body) override;
+    virtual void accept(CVisitor* v) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
 
     TokenType type;
-    expression* exp_ptr;
+    Expression* exp_ptr;
 };
 
 #endif

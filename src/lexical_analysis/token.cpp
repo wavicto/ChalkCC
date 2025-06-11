@@ -19,7 +19,7 @@ std::string Token::get_type_name(TokenType type) {
         case Close_brace: return "Close_brace";
         case Semicolon: return "Semicolon";
         case Identifier: return "Identifier";
-        case Constant: return "Constant";
+        case ConstantLiteral: return "Constant";
         case Int_key: return "Int_key";
         case Void_key: return "Void_key";
         case Return_key: return "Return_key";
@@ -28,12 +28,16 @@ std::string Token::get_type_name(TokenType type) {
         case Decrement: return "Decrement";
         case Negation: return "Negation";
         case Complement: return "Complement";
+        case Addition: return "Addition";
+        case Multiplication: return "Multiplication";
+        case Division: return "Division";
+        case Modulus: return "Modulus";
         default: return "Invalid";
     }
 }
 
 int Token::get_value(){
-    assert(get_type() == Constant); 
+    assert(get_type() == ConstantLiteral); 
     return this->value;
 }
     

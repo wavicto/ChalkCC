@@ -2,32 +2,32 @@
 #define ASM_VISITOR_HPP
 
 //Forward declaration
-class asm_program;
-class asm_function;
-class asm_mov;
-class asm_ret;
-class asm_unary;
-class asm_instruction;
-class asm_operand;
-class allocate_stack;
-class asm_reg;
-class asm_imm;
-class asm_pseudo_reg;
-class stack_location;
+class AsmProgram;
+class AsmFunction;
+class AsmInstruction;
+class AsmMov;
+class AsmRet;
+class AsmUnary;
+class StackAllocate;
+class AsmOperand;
+class AsmReg;
+class AsmImm;
+class AsmPseudoReg;
+class StackLocation;
 
-class asm_visitor {
+class AsmVisitor {
     public:
-    virtual void visit(asm_program* node) = 0;
-    virtual void visit(asm_function* node) = 0;
-    virtual void visit(asm_mov* node) = 0;
-    virtual void visit(asm_ret* node) = 0;
-    virtual void visit(asm_unary* node) = 0;
-    virtual void visit(allocate_stack* node) = 0;
-    virtual void visit(asm_reg* node) = 0;
-    virtual void visit(asm_imm* node) = 0;
-    virtual void visit(asm_pseudo_reg* node) = 0;
-    virtual void visit(stack_location* node) = 0;
-    virtual ~asm_visitor(){}
+    virtual void visit(AsmProgram* node) = 0;
+    virtual void visit(AsmFunction* node) = 0;
+    virtual void visit(AsmMov* node) = 0;
+    virtual void visit(AsmRet* node) = 0;
+    virtual void visit(AsmUnary* node) = 0;
+    virtual void visit(StackAllocate* node) = 0;
+    virtual void visit(AsmReg* node) = 0;
+    virtual void visit(AsmImm* node) = 0;
+    virtual void visit(AsmPseudoReg* node) = 0;
+    virtual void visit(StackLocation* node) = 0;
+    virtual ~AsmVisitor(){}
 };
 
 #endif

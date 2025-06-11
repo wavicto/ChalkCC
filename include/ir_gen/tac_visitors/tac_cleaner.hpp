@@ -3,15 +3,15 @@
 
 #include "ir_gen/tac_visitors/tac_visitor.hpp"
 
-//Cleans up dynamically allocated TAC_AST nodes
-class tac_cleaner : public tac_visitor {
+//Cleans up dynamically allocated TacAST nodes
+class TacCleaner : public TacVisitor {
     public:
-    virtual void visit(tac_program* node) override;
-    virtual void visit(tac_function* node) override;
-    virtual void visit(tac_return* node) override;
-    virtual void visit(tac_unary* node) override;
-    virtual void visit(tac_constant* node) override;
-    virtual void visit(tac_var* node) override;
+    virtual void visit(TacProgram* node) override;
+    virtual void visit(TacFunction* node) override;
+    virtual void visit(TacReturn* node) override;
+    virtual void visit(TacUnary* node) override;
+    virtual void visit(TacConstant* node) override;
+    virtual void visit(TacVar* node) override;
 };
 
 #endif

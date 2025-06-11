@@ -1,15 +1,15 @@
 #include "ir_gen/tac_visitors/tac_cleaner.hpp"
 #include "ir_gen/tac_node.hpp"
 
-void tac_cleaner::visit(tac_program* node){
-    tac_function* ptr = node->func_ptr;
+void TacCleaner::visit(TacProgram* node){
+    TacFunction* ptr = node->func_ptr;
     if(ptr){
         ptr->accept(this);
     }
     delete node;
 }
 
-void tac_cleaner::visit(tac_function* node){
+void TacCleaner::visit(TacFunction* node){
     for (auto ptr : node->body){
         if (ptr){
             ptr->accept(this);
@@ -18,13 +18,16 @@ void tac_cleaner::visit(tac_function* node){
     delete node;
 }
 
-void tac_cleaner::visit(tac_return* node){
+void TacCleaner::visit(TacReturn* node){
+    if (node->val_ptr){
+        (node->val_ptr)->accept(this);
+    }
     delete node;
 }
 
-void tac_cleaner::visit(tac_unary* node){
-    tac_val* src = node->src;
-    tac_val* dst = node->dst;
+void TacCleaner::visit(TacUnary* node){
+    TacVal* src = node->src;
+    TacVal* dst = node->dst;
 
     if (src){
         src->accept(this);
@@ -35,9 +38,9 @@ void tac_cleaner::visit(tac_unary* node){
     delete node;
 }
 
-void tac_cleaner::visit(tac_constant* node){
+void TacCleaner::visit(TacConstant* node){
     delete node;
 }
 
 //temp variables will be cleaned up in another method
-void tac_cleaner::visit(tac_var* node){}
+void TacCleaner::visit(TacVar* node){}

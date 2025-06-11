@@ -1,23 +1,27 @@
 #include "lexical_analysis/lexer.hpp"
 
-std::regex lexer::id("[a-zA-Z_]\\w*\\b");
-std::regex lexer::constant("[0-9]+\\b");
-std::regex lexer::int_key("int\\b");
-std::regex lexer::void_key("void\\b");
-std::regex lexer::return_key("return\\b");
-std::regex lexer::open_p("\\(");
-std::regex lexer::close_p("\\)");
-std::regex lexer::open_b("\\{");
-std::regex lexer::close_b("\\}");
-std::regex lexer::semicol(";");
-std::regex lexer::complement("~");
-std::regex lexer::negation("-");
-std::regex lexer::decrement("--");
-std::regex lexer::malformed_token("[0-9]+[a-zA-Z_]\\w*\\b");
+std::regex Lexer::id("[a-zA-Z_]\\w*\\b");
+std::regex Lexer::constantliteral("[0-9]+\\b");
+std::regex Lexer::int_key("int\\b");
+std::regex Lexer::void_key("void\\b");
+std::regex Lexer::return_key("return\\b");
+std::regex Lexer::open_parenthesis("\\(");
+std::regex Lexer::close_parenthesis("\\)");
+std::regex Lexer::open_brace("\\{");
+std::regex Lexer::close_brace("\\}");
+std::regex Lexer::semicolon(";");
+std::regex Lexer::complement("~");
+std::regex Lexer::negation("-");
+std::regex Lexer::decrement("--");
+std::regex Lexer::addition("\\+");
+std::regex Lexer::multiplication("\\*");
+std::regex Lexer::division("\\/");
+std::regex Lexer::modulus("\\%");
+std::regex Lexer::malformed_token("[0-9]+[a-zA-Z_]\\w*\\b");
 
-lexer::lexer(){}
+Lexer::Lexer(){}
 
-std::vector<Token> lexer::extract(std::ifstream &file){
+std::vector<Token> Lexer::extract(std::ifstream &file){
     std::string section;
     std::vector<Token> list;
 
@@ -33,7 +37,7 @@ std::vector<Token> lexer::extract(std::ifstream &file){
     return list;
 }
 
-void lexer::tokenize(std::vector<Token> &list, std::string token){
+void Lexer::tokenize(std::vector<Token> &list, std::string token){
     int start = 0;
     int end = 1;
 
@@ -63,33 +67,37 @@ void lexer::tokenize(std::vector<Token> &list, std::string token){
     
 }
 
-bool lexer::matches(const std::string& token) {
+bool Lexer::matches(const std::string& token) {
     if (std::regex_match(token, malformed_token)){
         throw std::runtime_error("Malformed Token");
     }
 
-    bool result = std::regex_match(token, decrement) ||
+    bool result = std::regex_match(token, addition) ||
+    std::regex_match(token, multiplication) ||
+    std::regex_match(token, division) ||
+    std::regex_match(token, modulus) ||
+    std::regex_match(token, decrement) ||
     std::regex_match(token, negation) ||
     std::regex_match(token, complement) ||
-    std::regex_match(token, open_b) ||
-    std::regex_match(token, close_b) ||
-    std::regex_match(token, semicol) ||
+    std::regex_match(token, open_brace) ||
+    std::regex_match(token, close_brace) ||
+    std::regex_match(token, semicolon) ||
     std::regex_match(token, id) ||
-    std::regex_match(token, constant) ||
-    std::regex_match(token, open_p) ||
-    std::regex_match(token, close_p);
+    std::regex_match(token, constantliteral) ||
+    std::regex_match(token, open_parenthesis) ||
+    std::regex_match(token, close_parenthesis);
 
     return result;
 }
 
-void lexer::token_adder(std::vector<Token> &list, std::string token){
-    if (std::regex_match(token, open_b)) {
+void Lexer::token_adder(std::vector<Token> &list, std::string token){
+    if (std::regex_match(token, open_brace)) {
         list.push_back(Token(Open_brace));
     }
-    else if (std::regex_match(token, close_b)) {
+    else if (std::regex_match(token, close_brace)) {
         list.push_back(Token(Close_brace));
     }
-    else if (std::regex_match(token, semicol)) {
+    else if (std::regex_match(token, semicolon)) {
         list.push_back(Token(Semicolon));
     }
     else if (std::regex_match(token, id)) {
@@ -106,13 +114,13 @@ void lexer::token_adder(std::vector<Token> &list, std::string token){
             list.push_back(Token(Identifier, token));
         }
     }
-    else if (std::regex_match(token, constant)) {
-        list.push_back(Token(Constant, stoi(token)));
+    else if (std::regex_match(token, constantliteral)) {
+        list.push_back(Token(ConstantLiteral, stoi(token)));
     }
-    else if (std::regex_match(token, open_p)) {
+    else if (std::regex_match(token, open_parenthesis)) {
         list.push_back(Token(Open_parenthesis));
     }
-    else if (std::regex_match(token, close_p)) {
+    else if (std::regex_match(token, close_parenthesis)) {
         list.push_back(Token(Close_parenthesis));
     }
     else if (std::regex_match(token, complement)){
@@ -124,5 +132,16 @@ void lexer::token_adder(std::vector<Token> &list, std::string token){
     else if (std::regex_match(token, decrement)){
         list.push_back(Token(Decrement));
     }
-
+    else if (std::regex_match(token, addition)){
+        list.push_back(Token(Addition));
+    }
+    else if (std::regex_match(token, multiplication)){
+        list.push_back(Token(Multiplication));
+    }
+    else if (std::regex_match(token, division)){
+        list.push_back(Token(Division));
+    }
+    else if (std::regex_match(token, modulus)){
+        list.push_back(Token(Modulus));
+    }
 }

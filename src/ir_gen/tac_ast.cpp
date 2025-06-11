@@ -1,51 +1,51 @@
 #include "ir_gen/tac_ast.hpp"
 
-TAC_AST::~TAC_AST(){
-    tac_cleaner cleaner;
+TacAST::~TacAST(){
+    TacCleaner cleaner;
     cleaner.visit(root);
     clean_temp_var();
 }
 
-TAC_AST::TAC_AST(AST &tree)
+TacAST::TacAST(AST &tree)
 :temp_var_count(0)
 {
     root = gen(tree.get_root());
 }
 
-tac_program* TAC_AST::get_root(){
+TacProgram* TacAST::get_root(){
     return root;
 }
 
-void TAC_AST::clean_temp_var(){
+void TacAST::clean_temp_var(){
     for (auto ptr : temp_vars){
         delete ptr;
     }
 }
 
-tac_program* TAC_AST::gen(program* node){
-    tac_program* program = new tac_program;
+TacProgram* TacAST::gen(Program* node){
+    TacProgram* program = new TacProgram;
     program->func_ptr = gen(node->func_ptr);
     return program;
 }
 
-tac_function* TAC_AST::gen(function* node){
-    tac_function* func = new tac_function;
+TacFunction* TacAST::gen(Function* node){
+    TacFunction* func = new TacFunction;
     func->id = node->name;
     gen(node->state_ptr, func->body);
     return func;
 }
 
-void TAC_AST::gen(statement* node, std::vector<tac_instruction*>& body){
-    tac_return* ret = new tac_return;
-    expression* exp_ptr = node->exp_ptr;
+void TacAST::gen(Statement* node, std::vector<TacInstruction*>& body){
+    TacReturn* ret = new TacReturn;
+    Expression* exp_ptr = node->exp_ptr;
     ret->val_ptr = exp_ptr->gen(this, body);
     body.push_back(ret);
 }
 
-tac_val* TAC_AST::gen(unary_op* node, std::vector<tac_instruction*>& body){
-    tac_unary* unary = new tac_unary;
+TacVal* TacAST::gen(UnaryOp* node, std::vector<TacInstruction*>& body){
+    TacUnary* unary = new TacUnary;
     unary->op = node->type;
-    expression* exp_ptr = node->exp_ptr;
+    Expression* exp_ptr = node->exp_ptr;
     //Recursive call so that the inner most node is created first
     unary->src = exp_ptr->gen(this, body);
     unary->dst = make_temp_var();
@@ -54,20 +54,20 @@ tac_val* TAC_AST::gen(unary_op* node, std::vector<tac_instruction*>& body){
     return unary->dst;
 }
 
-tac_constant* TAC_AST::gen(constant* node){
-    tac_constant* constant = new tac_constant;
+TacConstant* TacAST::gen(Constant* node){
+    TacConstant* constant = new TacConstant;
     constant->value = node->value;
     return constant;
 }
 
-tac_var* TAC_AST::make_temp_var(){
-    tac_var* var = new tac_var;
+TacVar* TacAST::make_temp_var(){
+    TacVar* var = new TacVar;
     var->name = "tmp." + std::to_string(temp_var_count);
     temp_var_count++;
     return var;
 }
 
-void TAC_AST::print(){
-    tac_printer p;
+void TacAST::print(){
+    TacPrinter p;
     p.visit(root);
 }

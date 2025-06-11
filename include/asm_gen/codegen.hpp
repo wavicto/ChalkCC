@@ -10,44 +10,44 @@
 #include "ir_gen/tac_node.hpp"
 
 //Forward declaration
-class TAC_AST;
+class TacAST;
 
-class ASM_AST {
+class AsmAST {
     public:
 
-    //Initalizes ASM_AST from TAC_AST
-    ASM_AST(TAC_AST &tree);
+    //Initalizes AsmAST from TacAST
+    AsmAST(TacAST &tree);
 
-    ~ASM_AST();
+    ~AsmAST();
 
-    //Generates assembly from ASM_AST
+    //Generates assembly from AsmAST
     void asm_gen();
 
     //Returns: map of pseudo registers with their respective stack_offset
     //Helper method for second compiler pass that allocates stack locations for pseudo registers
-    std::unordered_map<asm_pseudo_reg*, int> get_pseudo_map();
+    std::unordered_map<AsmPseudoReg*, int> get_pseudo_map();
 
     private:
-    asm_program* root;
+    AsmProgram* root;
     int stack_offset;
-    std::unordered_map<asm_pseudo_reg*, int> pseudo_map;
+    std::unordered_map<AsmPseudoReg*, int> pseudo_map;
     
     //Cleans up pseudo registers after they are replaced by a stack location
     void clean_map();
 
-    //Helper functions that generates ASM_AST by traversing through TAC_AST
-    asm_program* gen(tac_program* node);
-    asm_function* gen(tac_function* node);
-    void gen(tac_return* node, std::vector <asm_instruction*> &instructions);
-    void gen(tac_unary* node, std::vector <asm_instruction*> &instructions);
-    asm_operand* gen(tac_constant* node);
-    asm_operand* gen(tac_var* node);
+    //Helper functions that generates AsmAST by traversing through TacAST
+    AsmProgram* gen(TacProgram* node);
+    AsmFunction* gen(TacFunction* node);
+    void gen(TacReturn* node, std::vector <AsmInstruction*> &instructions);
+    void gen(TacUnary* node, std::vector <AsmInstruction*> &instructions);
+    AsmOperand* gen(TacConstant* node);
+    AsmOperand* gen(TacVar* node);
 
-    //Asists with ASM_AST generatoin
-    friend class tac_return;
-    friend class tac_unary;
-    friend class tac_constant;
-    friend class tac_var;
+    //Asists with AsmAST generation
+    friend class TacReturn;
+    friend class TacUnary;
+    friend class TacConstant;
+    friend class TacVar;
 };
 
 #endif

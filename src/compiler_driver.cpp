@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
         std::string option = argv[2];
 
         if (option == "-lex"){
-            lexer lex = lexer();
+            Lexer lex = Lexer();
             std::vector<Token> tokens = lex.extract(preprocessed_file);
 
             if (tokens.empty()) {
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
             return 0;
         }
         else if (option == "-parse"){
-            lexer lex = lexer();
+            Lexer lex = Lexer();
             std::vector<Token> tokens = lex.extract(preprocessed_file);
             AST tree(tokens);
             tree.print();
@@ -62,11 +62,11 @@ int main(int argc, char *argv[]) {
             return 0;
         }
         else if (option == "-codegen"){
-            lexer lex = lexer();
+            Lexer lex = Lexer();
             std::vector<Token> tokens = lex.extract(preprocessed_file);
             AST tree(tokens);
-            TAC_AST IR(tree);
-            ASM_AST a(IR);
+            TacAST IR(tree);
+            AsmAST a(IR);
             a.asm_gen();
             system("rm preprocessed_file.i");
             return 0;
@@ -82,11 +82,11 @@ int main(int argc, char *argv[]) {
     std::string name = input_path.stem().string();
 
     //Compiles the preprocessed file and outputs an assembly file
-    lexer lex = lexer();
+    Lexer lex = Lexer();
     std::vector<Token> tokens = lex.extract(preprocessed_file);
     AST tree(tokens);
-    TAC_AST IR(tree);
-    ASM_AST a(IR);
+    TacAST IR(tree);
+    AsmAST a(IR);
     a.asm_gen();
 
     //Produce an executable file

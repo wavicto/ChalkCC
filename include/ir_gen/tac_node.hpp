@@ -9,74 +9,74 @@
 #include "asm_gen/codegen.hpp"
 
 //Forward declaration
-class ASM_AST;
+class AsmAST;
 
-class TACNode {
+class TacNode {
     public:
-    virtual void accept(tac_visitor* v) = 0;
-    virtual ~TACNode();
+    virtual void accept(TacVisitor* v) = 0;
+    virtual ~TacNode();
 };
 
-class tac_program : public TACNode {
+class TacProgram : public TacNode {
     public:
-    virtual void accept(tac_visitor* v) override;
+    virtual void accept(TacVisitor* v) override;
 
-    tac_function* func_ptr;
+    TacFunction* func_ptr;
 };
 
-class tac_function : public TACNode {
+class TacFunction : public TacNode {
     public:
-    virtual void accept(tac_visitor* v) override;
+    virtual void accept(TacVisitor* v) override;
 
     std::string id;
-    std::vector<tac_instruction*> body;
+    std::vector<TacInstruction*> body;
 };
 
-class tac_instruction : public TACNode {
+class TacInstruction : public TacNode {
     public:
-    virtual void accept(tac_visitor* v) = 0;
-    //Asists ASM_AST generation through polymorphism on children classes
-    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) = 0;
+    virtual void accept(TacVisitor* v) = 0;
+    //Asists AsmAST generation through polymorphism on children classes
+    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) = 0;
 };
 
-class tac_return : public tac_instruction {
+class TacReturn : public TacInstruction {
     public:
-    virtual void accept(tac_visitor* v) override;
-    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) override;
+    virtual void accept(TacVisitor* v) override;
+    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
 
-    tac_val* val_ptr;
+    TacVal* val_ptr;
 };
 
-class tac_unary : public tac_instruction {
+class TacUnary : public TacInstruction{
     public:
-    virtual void accept(tac_visitor* v) override;
-    virtual void gen(ASM_AST* tree, std::vector <asm_instruction*> &instructions) override;
+    virtual void accept(TacVisitor* v) override;
+    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
 
     TokenType op;
-    tac_val* src;
+    TacVal* src;
     //dst must be a var
-    tac_val* dst;
+    TacVal* dst;
 };
 
-class tac_val : public TACNode {
+class TacVal : public TacNode {
     public:
-    virtual void accept(tac_visitor* v) = 0;
-    //Asists ASM_AST generation through polymorphism on children classes
-    virtual asm_operand* gen(ASM_AST* tree) = 0;
+    virtual void accept(TacVisitor* v) = 0;
+    //Asists AsmAST generation through polymorphism on children classes
+    virtual AsmOperand* gen(AsmAST* tree) = 0;
 };
 
-class tac_constant : public tac_val {
+class TacConstant : public TacVal {
     public:
-    virtual void accept(tac_visitor* v) override;
-    virtual asm_operand* gen(ASM_AST* tree) override;
+    virtual void accept(TacVisitor* v) override;
+    virtual AsmOperand* gen(AsmAST* tree) override;
 
     int value;
 };
 
-class tac_var : public tac_val {
+class TacVar : public TacVal {
     public:
-    virtual void accept(tac_visitor* v) override;
-    virtual asm_operand* gen(ASM_AST* tree) override;
+    virtual void accept(TacVisitor* v) override;
+    virtual AsmOperand* gen(AsmAST* tree) override;
 
     std::string name;
 };

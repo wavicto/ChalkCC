@@ -1,32 +1,32 @@
 #include "ir_gen/tac_visitors/tac_printer.hpp"
 #include "ir_gen/tac_node.hpp"
 
-void tac_printer::visit(tac_program* node) {
+void TacPrinter::visit(TacProgram* node) {
     std::cout << "Program:" << std::endl;
-    tac_function* ptr = node->func_ptr;
+    TacFunction* ptr = node->func_ptr;
     if (ptr) {
         ptr->accept(this);
     }
 }
 
-void tac_printer::visit(tac_function* node) {
+void TacPrinter::visit(TacFunction* node) {
     std::cout << "Function: Name: " << node->id << std::endl;
-    for (tac_instruction* instr : node->body) {
+    for (TacInstruction* instr : node->body) {
         if (instr) {
             instr->accept(this);
         }
     }
 }
 
-void tac_printer::visit(tac_return* node) {
+void TacPrinter::visit(TacReturn* node) {
     std::cout << "Instruction: Return: ";
-    tac_val* ptr = node->val_ptr;
+    TacVal* ptr = node->val_ptr;
     if (ptr) {
         ptr->accept(this);
     }
 }
 
-void tac_printer::visit(tac_unary* node) {
+void TacPrinter::visit(TacUnary* node) {
     std::cout << "Instruction: Unary: " << std::endl;
 
     std::cout << "\tOperator: ";
@@ -43,22 +43,22 @@ void tac_printer::visit(tac_unary* node) {
     }
 
     std::cout << "\tSRC: ";
-    tac_val* src = node->src;
+    TacVal* src = node->src;
     if (src) {
         src->accept(this);
     }
 
     std::cout << "\tDST: ";
-    tac_val* dst = node->dst;
+    TacVal* dst = node->dst;
     if (dst) {
         dst->accept(this);
     }
 }
 
-void tac_printer::visit(tac_constant* node) {
+void TacPrinter::visit(TacConstant* node) {
     std::cout << "Value: Constant(" << node->value << ")" << std::endl;
 }
 
-void tac_printer::visit(tac_var* node) {
+void TacPrinter::visit(TacVar* node) {
     std::cout << "Value: Variable(" << node->name << ")" << std::endl;
 }

@@ -2,25 +2,25 @@
 #define TAC_VISITOR_HPP
 
 //Forward declaration
-class tac_program;
-class tac_function;
-class tac_instruction;
-class tac_return;
-class tac_unary;
-class tac_val;
-class tac_constant;
-class tac_var;
+class TacProgram;
+class TacFunction;
+class TacInstruction;
+class TacReturn;
+class TacUnary;
+class TacVal;
+class TacConstant;
+class TacVar;
 
-class tac_visitor {
+class TacVisitor {
     public:
-    virtual void visit(tac_program* node) = 0;
-    virtual void visit(tac_function* node) = 0;
-    virtual void visit(tac_return* node) = 0;
-    virtual void visit(tac_unary* node) = 0;
-    virtual void visit(tac_constant* node) = 0;
-    virtual void visit(tac_var* node) = 0;
+    virtual void visit(TacProgram* node) = 0;
+    virtual void visit(TacFunction* node) = 0;
+    virtual void visit(TacReturn* node) = 0;
+    virtual void visit(TacUnary* node) = 0;
+    virtual void visit(TacConstant* node) = 0;
+    virtual void visit(TacVar* node) = 0;
 
-    virtual ~tac_visitor(){}
+    virtual ~TacVisitor(){}
 };
 
 #endif

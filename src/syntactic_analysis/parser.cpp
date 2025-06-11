@@ -1,7 +1,7 @@
 #include "syntactic_analysis/parser.hpp"
 
 AST::AST(std::vector<Token>& tokens)
-    :root(new program)
+    :root(new Program)
 {
     try {
     root->func_ptr = parse_function(tokens);
@@ -13,21 +13,21 @@ AST::AST(std::vector<Token>& tokens)
 }
 
 AST::~AST(){
-    c_cleaner cleaner;
+    CCleaner cleaner;
     cleaner.visit(this->root);
 }
 
 void AST::print(){
-    c_printer printer;
+    CPrinter printer;
     printer.visit(this->root);
 }
 
-program* AST::get_root(){
+Program* AST::get_root(){
     return root;
 }
 
-function* AST::parse_function(std::vector<Token>& tokens) {
-    function* func = new function;
+Function* AST::parse_function(std::vector<Token>& tokens) {
+    Function* func = new Function;
     bool is_int = tokens[0].expect(Int_key);
 
     if (!is_int){
@@ -55,8 +55,8 @@ function* AST::parse_function(std::vector<Token>& tokens) {
     return func;
 }
 
-statement* AST::parse_statement(std::vector<Token>& tokens){
-    statement* state = new statement;
+Statement* AST::parse_statement(std::vector<Token>& tokens){
+    Statement* state = new Statement;
 
     if(!tokens[0].expect(Return_key)){
         throw std::runtime_error("Expected return key");
@@ -74,10 +74,10 @@ statement* AST::parse_statement(std::vector<Token>& tokens){
     return state;
 }
 
-expression* AST::parse_expression(std::vector<Token>& tokens){
-    expression* exp = nullptr;
+Expression* AST::parse_expression(std::vector<Token>& tokens){
+    Expression* exp = nullptr;
 
-    if(tokens[0].expect(Constant)){
+    if(tokens[0].expect(ConstantLiteral)){
         exp = parse_constant(tokens);
         tokens.erase(tokens.begin());
         return exp;
@@ -100,8 +100,8 @@ expression* AST::parse_expression(std::vector<Token>& tokens){
     }
 }
 
-unary_op* AST::parse_unary(std::vector<Token>& tokens){
-    unary_op* ptr = new unary_op;
+UnaryOp* AST::parse_unary(std::vector<Token>& tokens){
+    UnaryOp* ptr = new UnaryOp;
     if (tokens[0].expect(Negation)){
         ptr->type = Negation;
         tokens.erase(tokens.begin());
@@ -114,8 +114,8 @@ unary_op* AST::parse_unary(std::vector<Token>& tokens){
     return ptr;
 }
 
-constant* AST::parse_constant(std::vector<Token>& tokens){
-    constant* c = new constant;
+Constant* AST::parse_constant(std::vector<Token>& tokens){
+    Constant* c = new Constant;
     c->value = tokens[0].get_value();
     return c;
 }

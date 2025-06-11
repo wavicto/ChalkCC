@@ -1,24 +1,24 @@
 #include "asm_gen/asm_visitors/asm_printer.hpp"
 #include "asm_gen/asm_node.hpp"
 
-void asm_printer::visit(asm_program* node) {
+void AsmPrinter::visit(AsmProgram* node) {
     std::cout << "Program:" << std::endl;
-    asm_function* ptr = node->func_ptr;
+    AsmFunction* ptr = node->func_ptr;
     if (ptr) {
         ptr->accept(this);
     }
 }
 
-void asm_printer::visit(asm_function* node) {
+void AsmPrinter::visit(AsmFunction* node) {
     std::cout << "Function: Name: " << node->name << std::endl;
-    for (asm_instruction* instr : node->instructions) {
+    for (AsmInstruction* instr : node->instructions) {
         if (instr) {
             instr->accept(this);
         }
     }
 }
 
-void asm_printer::visit(asm_mov* node) {
+void AsmPrinter::visit(AsmMov* node) {
     std::cout << "Instruction: Mov:" << std::endl;
 
     std::cout << "\tSRC: ";
@@ -32,11 +32,11 @@ void asm_printer::visit(asm_mov* node) {
     }
 }
 
-void asm_printer::visit(asm_ret* node) {
+void AsmPrinter::visit(AsmRet* node) {
     std::cout << "Instruction: Ret" << std::endl;
 }
 
-void asm_printer::visit(asm_unary* node) {
+void AsmPrinter::visit(AsmUnary* node) {
     std::cout << "Instruction: Unary:" << std::endl;
 
     std::cout << "\tOperator: ";
@@ -58,11 +58,11 @@ void asm_printer::visit(asm_unary* node) {
     }
 }
 
-void asm_printer::visit(allocate_stack* node) {
+void AsmPrinter::visit(StackAllocate* node) {
     std::cout << "Instruction: Allocate Stack: " << node->size << " bytes" << std::endl;
 }
 
-void asm_printer::visit(asm_reg* node) {
+void AsmPrinter::visit(AsmReg* node) {
     std::cout << "Operand: Register: ";
     switch (node->name) {
         case AX: std::cout << "RAX"; break;
@@ -72,14 +72,14 @@ void asm_printer::visit(asm_reg* node) {
     std::cout << std::endl;
 }
 
-void asm_printer::visit(asm_imm* node) {
+void AsmPrinter::visit(AsmImm* node) {
     std::cout << "Operand: Imm: " << node->value << std::endl;
 }
 
-void asm_printer::visit(asm_pseudo_reg* node) {
+void AsmPrinter::visit(AsmPseudoReg* node) {
     std::cout << "Operand: Pseudo Register: " << node->id << std::endl;
 }
 
-void asm_printer::visit(stack_location* node) {
+void AsmPrinter::visit(StackLocation* node) {
     std::cout << "Operand: Stack Location: " << node->rbp_offset << "(%rbp)" << std::endl;
 }

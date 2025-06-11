@@ -7,7 +7,7 @@
 //Lexer TokenTypes
 enum TokenType {
     Identifier,
-    Constant,
+    ConstantLiteral,
     Int_key,
     Void_key,
     Return_key,
@@ -18,7 +18,11 @@ enum TokenType {
     Semicolon,
     Complement,
     Negation,
-    Decrement
+    Decrement,
+    Addition,
+    Multiplication,
+    Division,
+    Modulus
 };
 
 class Token {

@@ -2,30 +2,30 @@
 
 ASTNode::~ASTNode(){}
 
-void program::accept(c_visitor* v){
+void Program::accept(CVisitor* v){
     v->visit(this);
 }
 
-void function::accept(c_visitor* v){
+void Function::accept(CVisitor* v){
     v->visit(this);
 }
 
-void statement::accept(c_visitor* v){
+void Statement::accept(CVisitor* v){
     v->visit(this);
 }
 
-void unary_op::accept(c_visitor* v){
+void UnaryOp::accept(CVisitor* v){
     v->visit(this);
 }
 
-void constant::accept(c_visitor* v){
+void Constant::accept(CVisitor* v){
     v->visit(this);
 }
 
-tac_val* constant::gen(TAC_AST* tree, std::vector<tac_instruction*>& body){
+TacVal* Constant::gen(TacAST* tree, std::vector<TacInstruction*>& body){
     return tree->gen(this);
 }
 
-tac_val* unary_op::gen(TAC_AST* tree, std::vector<tac_instruction*>& body){
+TacVal* UnaryOp::gen(TacAST* tree, std::vector<TacInstruction*>& body){
     return tree->gen(this, body);
 }

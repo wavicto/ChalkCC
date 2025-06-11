@@ -18,18 +18,18 @@ class AST {
     void print();
 
     //RETURNS: the root program node
-    program* get_root();
+    Program* get_root();
 
 
     private:
-    program* root;
+    Program* root;
 
     //Heper functions used to generate C AST from tokens
-    function* parse_function(std::vector<Token>& tokens);
-    statement* parse_statement(std::vector<Token>& token);
-    expression* parse_expression(std::vector<Token>& tokens);
-    unary_op* parse_unary(std::vector<Token>& tokens);
-    constant* parse_constant(std::vector<Token>& tokens);
+    Function* parse_function(std::vector<Token>& tokens);
+    Statement* parse_statement(std::vector<Token>& token);
+    Expression* parse_expression(std::vector<Token>& tokens);
+    UnaryOp* parse_unary(std::vector<Token>& tokens);
+    Constant* parse_constant(std::vector<Token>& tokens);
 };
 
 #endif
