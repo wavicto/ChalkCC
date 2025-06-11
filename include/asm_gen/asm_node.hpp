@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "asm_gen/asm_visitor.hpp"
+#include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Register names, size agnostic
 enum Reg {

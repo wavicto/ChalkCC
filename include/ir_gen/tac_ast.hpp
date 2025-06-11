@@ -2,7 +2,8 @@
 #define TAC_TREE_HPP
 
 #include "ir_gen/tac_node.hpp"
-#include "ir_gen/tac_visitor.hpp"
+#include "ir_gen/tac_visitors/tac_cleaner.hpp"
+#include "ir_gen/tac_visitors/tac_printer.hpp"
 #include "syntactic_analysis/parser.hpp"
 #include "syntactic_analysis/c_node.hpp"
 

@@ -3,6 +3,8 @@
 
 #include "lexical_analysis/lexer.hpp"
 #include "syntactic_analysis/c_node.hpp"
+#include "syntactic_analysis/c_visitors/c_cleaner.hpp"
+#include "syntactic_analysis/c_visitors/c_printer.hpp"
 
 class AST {
     public:

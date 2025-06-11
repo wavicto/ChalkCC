@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "lexical_analysis/token.hpp"
-#include "ir_gen/tac_visitor.hpp"
+#include "ir_gen/tac_visitors/tac_visitor.hpp"
 #include "asm_gen/asm_node.hpp"
 #include "asm_gen/codegen.hpp"
 

@@ -2,8 +2,7 @@
 #define C_NODE_HPP
 
 #include <string>
-#include <iostream>
-#include "syntactic_analysis/c_visitor.hpp"
+#include "syntactic_analysis/c_visitors/c_visitor.hpp"
 #include "ir_gen/tac_node.hpp"
 #include "ir_gen/tac_ast.hpp"
 

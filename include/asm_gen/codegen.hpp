@@ -3,7 +3,10 @@
 
 #include <unordered_map>
 #include "asm_gen/asm_node.hpp"
-#include "asm_gen/asm_visitor.hpp"
+#include "asm_gen/asm_visitors/asm_pseudo_locator.hpp"
+#include "asm_gen/asm_visitors/asm_instruction_finalizer.hpp"
+#include "asm_gen/asm_visitors/asm_generator.hpp"
+#include "asm_gen/asm_visitors/asm_cleaner.hpp"
 #include "ir_gen/tac_node.hpp"
 
 //Forward declaration
