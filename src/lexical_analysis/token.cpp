@@ -26,7 +26,7 @@ std::string Token::get_type_name(TokenType type) {
         case Open_parenthesis: return "Open_parenthesis";
         case Close_parenthesis: return "Close_parenthesis";
         case Decrement: return "Decrement";
-        case Negation: return "Negation";
+        case Negation: return "Negation/Subtraction";
         case Complement: return "Complement";
         case Addition: return "Addition";
         case Multiplication: return "Multiplication";

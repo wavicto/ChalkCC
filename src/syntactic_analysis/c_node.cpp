@@ -18,6 +18,10 @@ void UnaryOp::accept(CVisitor* v){
     v->visit(this);
 }
 
+void BinaryOp::accept(CVisitor* v){
+    v->visit(this);
+}
+
 void Constant::accept(CVisitor* v){
     v->visit(this);
 }
@@ -29,3 +33,8 @@ TacVal* Constant::gen(TacAST* tree, std::vector<TacInstruction*>& body){
 TacVal* UnaryOp::gen(TacAST* tree, std::vector<TacInstruction*>& body){
     return tree->gen(this, body);
 }
+
+TacVal* BinaryOp::gen(TacAST* tree, std::vector<TacInstruction*>& body){
+    return tree->gen(this, body);
+}
+

@@ -86,6 +86,62 @@ void AsmAST::gen(TacUnary* node, std::vector <AsmInstruction*> &instructions){
     instructions.push_back(unary_ptr);
 }
 
+/*
+Binary(op, src1, src2, dst)
+to:
+Mov(src1, dst)
+Binary(op, src2, dst)
+*/
+void AsmAST::gen(TacBinary* node, std::vector <AsmInstruction*> &instructions){
+    /*
+    Binary(Divide, src1, src2, dst)
+to:
+Mov(src1, Reg(AX))
+Cdq
+Idiv(src2)
+Mov(Reg(AX), dst)
+    */
+    if (node->binary_op = Division){
+        AsmMov* mov_1 = new AsmMov;
+        AsmMov* mov_2 = new AsmMov;
+        Cdq* cdq = new Cdq;
+        Idiv* div = new Idiv;
+        AsmReg* one = new AsmReg;
+        AsmReg* two = new AsmReg;
+        one->name = AX;
+        two->name = AX;
+        mov_1->src = (node->src_1)->gen(this);
+        mov_1->dst = one;
+        div->operand_ptr = (node->src_2)->gen(this);
+        mov_2->src = two;
+        mov_2->dst = (node->dst)->gen(this);
+        instructions.push_back(mov_1);
+        instructions.push_back(cdq);
+        instructions.push_back(div);
+        instructions.push_back(mov_2);
+    }
+    else {
+        AsmMov* mov = new AsmMov;
+        mov->src = (node->src_1)->gen(this);
+        mov->dst = (node->dst)->gen(this);
+        AsmBinary* binary = new AsmBinary;
+        if (node->binary_op == Addition){
+            binary->op = Add;
+        }
+        else if (node->binary_op == Negation){
+            binary->op = Sub;
+        }
+        else if (node->binary_op == Multiplication){
+            binary->op = Mult;
+        }
+        binary->left_operand = (node->src_2)->gen(this);
+        binary->right_operand = mov->dst; 
+        instructions.push_back(mov);
+        instructions.push_back(binary);
+    }
+}
+
+
 AsmOperand* AsmAST::gen(TacConstant* node){
     AsmImm* literal = new AsmImm;
     literal->value = node->value;

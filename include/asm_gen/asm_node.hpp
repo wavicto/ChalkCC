@@ -8,12 +8,20 @@
 //Register names, size agnostic
 enum Reg {
     AX,
-    R10
+    R10,
+    DX,
+    R11
 };
 
 enum UnaryOperator {
     Not,
     Neg
+};
+
+enum BinaryOperator {
+    Add,
+    Sub,
+    Mult
 };
 
 class AsmNode {
@@ -57,6 +65,28 @@ class AsmUnary : public AsmInstruction {
     virtual void accept(AsmVisitor* v) override;
     UnaryOperator op;
     AsmOperand* operand_ptr;
+};
+
+class AsmBinary : public AsmInstruction {
+    public:
+    virtual void accept(AsmVisitor* v) override;
+
+    BinaryOperator op;
+    AsmOperand* left_operand;
+    AsmOperand* right_operand;
+};
+
+class Idiv : public AsmInstruction {
+    public:
+    virtual void accept(AsmVisitor* v) override;
+
+    AsmOperand* operand_ptr;
+};
+
+class Cdq : public AsmInstruction {
+    public:
+    virtual void accept(AsmVisitor* v) override;
+
 };
 
 class StackAllocate : public AsmInstruction {

@@ -10,6 +10,7 @@ class Statement;
 class Expression;
 class Constant;
 class UnaryOp;
+class BinaryOp;
 
 //Abstract visitor interface
 class CVisitor {
@@ -19,6 +20,7 @@ class CVisitor {
     virtual void visit(Statement* node) = 0;
     virtual void visit(Constant* node) = 0;
     virtual void visit(UnaryOp* node) = 0;
+    virtual void visit(BinaryOp* node) = 0;
     virtual ~CVisitor(){}
 };
 

@@ -34,6 +34,7 @@ class TacAST {
     TacFunction* gen(Function* node);
     void gen(Statement* node, std::vector<TacInstruction*>& body);
     TacVal* gen(UnaryOp* node, std::vector<TacInstruction*>& body);
+    TacVal* gen(BinaryOp* node, std::vector<TacInstruction*>& body);
     TacConstant* gen(Constant* node);
 
     TacVar* make_temp_var();
@@ -41,6 +42,7 @@ class TacAST {
     void clean_temp_var();
 
     //Asists with TacAST generation
+    friend class BinaryOp;
     friend class Constant;
     friend class UnaryOp;
 };

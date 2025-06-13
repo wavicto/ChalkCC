@@ -34,6 +34,20 @@ void CPrinter::visit(UnaryOp* node){
     }
 }
 
+void CPrinter::visit(BinaryOp* node){
+    std::cout << "Expression: Binary" << std::endl;
+    if (node->exp_left){
+        std::cout << "LHS: ";
+        node->exp_left->accept(this);
+    }
+    Token t(node->op);
+    std::cout << "Operator: " << t.get_type_name(node->op) << std::endl;
+    if (node->exp_right){
+        std::cout << "RHS: ";
+        node->exp_right->accept(this);
+    }
+}
+
 void CPrinter::visit(Constant* node){
     std::cout << "Expression: Constant(" << node->value << ")" << std::endl;
 }

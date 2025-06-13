@@ -40,6 +40,7 @@ class AsmAST {
     AsmFunction* gen(TacFunction* node);
     void gen(TacReturn* node, std::vector <AsmInstruction*> &instructions);
     void gen(TacUnary* node, std::vector <AsmInstruction*> &instructions);
+    void gen(TacBinary* node, std::vector <AsmInstruction*> &instructions);
     AsmOperand* gen(TacConstant* node);
     AsmOperand* gen(TacVar* node);
 

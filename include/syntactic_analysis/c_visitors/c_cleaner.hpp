@@ -11,6 +11,7 @@ class CCleaner : public CVisitor {
     void visit(Statement* node) override;
     void visit(Constant* node) override;
     void visit(UnaryOp* node) override;
+    void visit(BinaryOp* node) override;
 };
 
 #endif

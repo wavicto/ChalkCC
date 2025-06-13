@@ -38,7 +38,7 @@ void TacPrinter::visit(TacUnary* node) {
             std::cout<< "Negation" << std::endl; 
             break;
         default: 
-            std::cout << "Error" << std::endl; 
+            std::cout << "Unknown Operator" << std::endl; 
             break;
     }
 
@@ -46,6 +46,47 @@ void TacPrinter::visit(TacUnary* node) {
     TacVal* src = node->src;
     if (src) {
         src->accept(this);
+    }
+
+    std::cout << "\tDST: ";
+    TacVal* dst = node->dst;
+    if (dst) {
+        dst->accept(this);
+    }
+}
+
+void TacPrinter::visit(TacBinary* node) {
+    std::cout << "Instruction: Binary: " << std::endl;
+
+    std::cout << "\tOperator: ";
+    switch (node->binary_op) {
+        case Addition: 
+            std::cout << "Addition" << std::endl; 
+            break;
+        case Negation: 
+            std::cout<< "Subtraction" << std::endl; 
+            break;
+        case Multiplication: 
+            std::cout<< "Multiplication" << std::endl; 
+            break;
+        case Division: 
+            std::cout<< "Division" << std::endl; 
+            break;
+        default: 
+            std::cout << "Unknown Operator" << std::endl; 
+            break;
+    }
+
+    std::cout << "\tSRC_1: ";
+    TacVal* src_1 = node->src_1;
+    if (src_1) {
+        src_1->accept(this);
+    }
+
+    std::cout << "\tSRC_2: ";
+    TacVal* src_2 = node->src_2;
+    if (src_2) {
+        src_2->accept(this);
     }
 
     std::cout << "\tDST: ";

@@ -54,6 +54,17 @@ TacVal* TacAST::gen(UnaryOp* node, std::vector<TacInstruction*>& body){
     return unary->dst;
 }
 
+TacVal* TacAST::gen(BinaryOp* node, std::vector<TacInstruction*>& body){
+    TacBinary* binary = new TacBinary;
+    binary->src_1 = (node->exp_left)->gen(this, body);
+    binary->src_2 = (node->exp_right)->gen(this, body);
+    binary->dst = make_temp_var();
+    temp_vars.push_back(binary->dst);
+    binary->binary_op = node->op;
+    body.push_back(binary);
+    return binary->dst;
+}
+
 TacConstant* TacAST::gen(Constant* node){
     TacConstant* constant = new TacConstant;
     constant->value = node->value;

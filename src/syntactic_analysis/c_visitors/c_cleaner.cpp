@@ -33,6 +33,16 @@ void CCleaner::visit(UnaryOp* node) {
     delete node;
 }
 
+void CCleaner::visit(BinaryOp* node){
+    if (node->exp_left){
+        (node->exp_left)->accept(this);
+    }
+    if (node->exp_right){
+        (node->exp_right)->accept(this);
+    }
+    delete node;
+}
+
 void CCleaner::visit(Constant* node){
     delete node;
 }

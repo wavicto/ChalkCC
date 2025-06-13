@@ -11,6 +11,7 @@ class TacPrinter : public TacVisitor {
     virtual void visit(TacFunction* node) override;
     virtual void visit(TacReturn* node) override;
     virtual void visit(TacUnary* node) override;
+    virtual void visit(TacBinary* node) override;
     virtual void visit(TacConstant* node) override;
     virtual void visit(TacVar* node) override;
 };

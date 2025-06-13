@@ -38,6 +38,23 @@ void TacCleaner::visit(TacUnary* node){
     delete node;
 }
 
+void TacCleaner::visit(TacBinary* node){
+    TacVal* src_1 = node->src_1;
+    TacVal* src_2 = node->src_2;
+    TacVal* dst = node->dst;
+
+    if (src_1){
+        src_1->accept(this);
+    }
+    if (src_2){
+        src_2->accept(this);
+    }
+    if (dst ){
+        dst->accept(this);
+    }
+    delete node;
+}
+
 void TacCleaner::visit(TacConstant* node){
     delete node;
 }

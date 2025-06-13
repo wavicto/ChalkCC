@@ -54,7 +54,17 @@ class TacUnary : public TacInstruction{
 
     TokenType op;
     TacVal* src;
-    //dst must be a var
+    TacVal* dst;
+};
+
+class TacBinary : public TacInstruction {
+    public:
+    virtual void accept(TacVisitor* v) override;
+    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
+
+    TokenType binary_op;
+    TacVal* src_1;
+    TacVal* src_2;
     TacVal* dst;
 };
 

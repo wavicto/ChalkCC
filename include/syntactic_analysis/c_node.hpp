@@ -61,4 +61,16 @@ class UnaryOp : public Expression {
     Expression* exp_ptr;
 };
 
+class BinaryOp : public Expression {
+    public:
+    virtual void accept(CVisitor* v) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
+
+    //Negation is interpreted the same as subtraction
+    TokenType op;
+    Expression* exp_left;
+    Expression* exp_right;
+};
+
+
 #endif
