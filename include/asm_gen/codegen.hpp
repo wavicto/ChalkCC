@@ -48,6 +48,7 @@ class AsmAST {
     friend class TacReturn;
     friend class TacUnary;
     friend class TacConstant;
+    friend class TacBinary;
     friend class TacVar;
 };
 

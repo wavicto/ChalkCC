@@ -116,7 +116,7 @@ Expression* AST::parse_expression(std::vector<Token>& tokens, int min_precedence
 
     left_exp = parse_factor(tokens);
 
-    while (((tokens[0].expect(Addition)) || (tokens[0].expect(Negation)) 
+    while (((tokens[0].expect(Addition)) || (tokens[0].expect(Negation)) || (tokens[0].expect(Modulus))
     || (tokens[0].expect(Multiplication)) || (tokens[0].expect(Division))) &&
     precedence_map[tokens[0].get_type()] >= min_precedence){
         BinaryOp* b_op = new BinaryOp;

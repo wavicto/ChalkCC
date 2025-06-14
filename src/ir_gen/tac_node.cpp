@@ -39,7 +39,7 @@ void TacUnary::gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions){
 }
 
 void TacBinary::gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions){
-    //placeholder for now
+    tree->gen(this, instructions);
 }
 
 AsmOperand* TacConstant::gen(AsmAST* tree){
