@@ -2,6 +2,7 @@
 #define ASM_INSTRUCTION_FINALIZER_HPP
 
 #include <vector>
+#include <stdexcept>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Class for third compiler pass
@@ -14,6 +15,9 @@ class AsmInstructionFinalizer: public AsmVisitor {
     virtual void visit(AsmMov* node) override;
     virtual void visit(AsmRet* node) override;
     virtual void visit(AsmUnary* node) override;
+    virtual void visit(AsmBinary* node) override;
+    virtual void visit(Cdq* node) override;
+    virtual void visit(Idiv* node) override;
     virtual void visit(StackAllocate* node) override;
     virtual void visit(AsmReg* node) override;
     virtual void visit(AsmImm* node) override;

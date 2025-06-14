@@ -72,8 +72,8 @@ class AsmBinary : public AsmInstruction {
     virtual void accept(AsmVisitor* v) override;
 
     BinaryOperator op;
-    AsmOperand* left_operand;
-    AsmOperand* right_operand;
+    AsmOperand* src;
+    AsmOperand* dst;
 };
 
 class Idiv : public AsmInstruction {

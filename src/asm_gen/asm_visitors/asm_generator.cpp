@@ -48,6 +48,26 @@ void AsmGenerator::visit(AsmUnary* node){
     file << std::endl;
 }
 
+void AsmGenerator::visit(AsmBinary* node){
+    if (node->op == Mult){
+        file << "\timull\t";
+    }
+    else if (node->op == Add){
+        file << "\taddl\t";
+    }
+    else if (node->op == Sub){
+        file << "\tsubl\t";
+    }
+}
+
+void AsmGenerator::visit(Idiv* node){
+    
+}
+
+void AsmGenerator::visit(Cdq* node){
+    file << "cdq" << std::endl;
+}
+
 void AsmGenerator::visit(StackAllocate* node){
     file << "\tsubq\t$" << node->size << ", %rsp" << std::endl;
 }

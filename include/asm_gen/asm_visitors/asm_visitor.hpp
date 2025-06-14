@@ -25,6 +25,9 @@ class AsmVisitor {
     virtual void visit(AsmMov* node) = 0;
     virtual void visit(AsmRet* node) = 0;
     virtual void visit(AsmUnary* node) = 0;
+    virtual void visit(AsmBinary* node) = 0;
+    virtual void visit(Cdq* node) = 0;
+    virtual void visit(Idiv* node) = 0;
     virtual void visit(StackAllocate* node) = 0;
     virtual void visit(AsmReg* node) = 0;
     virtual void visit(AsmImm* node) = 0;

@@ -51,9 +51,46 @@ void AsmPrinter::visit(AsmUnary* node) {
             std::cout << "UNKNOWN" << std::endl;
             break;
     }
-
     std::cout << "\tOperand: ";
     if (node->operand_ptr) {
+        node->operand_ptr->accept(this);
+    }
+}
+
+void AsmPrinter::visit(AsmBinary* node) {
+    std::cout << "Instruction: Binary:" << std::endl;
+    if (node->src){
+        std::cout << "SRC: ";
+        node->src->accept(this);
+    }
+    std::cout << "Operator: " << std::endl;
+    switch (node->op) {
+        case Mult:
+            std::cout << "Multiplication" << std::endl;
+            break;
+        case Sub:
+            std::cout << "Subtraction" << std::endl;
+            break;
+        case Add:
+            std::cout << "Addition" << std::endl;
+            break;
+        default:
+            std::cout << "UNKNOWN" << std::endl;
+            break;
+    }
+    if (node->dst){
+        std::cout << "Right Operand: ";
+        node->dst->accept(this);
+    }
+}
+
+void AsmPrinter::visit(Cdq* node) {
+    std::cout << "Instruction: Cdq" << std::endl;
+}
+
+void AsmPrinter::visit(Idiv* node) {
+    std::cout << "Instruction: Idiv: ";
+    if (node->operand_ptr){
         node->operand_ptr->accept(this);
     }
 }

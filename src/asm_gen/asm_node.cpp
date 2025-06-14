@@ -29,6 +29,19 @@ void StackLocation::accept(AsmVisitor* v){
 void AsmUnary::accept(AsmVisitor* v){
     v->visit(this);
 }
+
+void AsmBinary::accept(AsmVisitor * v){
+    v->visit(this);
+}
+
+void Cdq::accept(AsmVisitor * v){
+    v->visit(this);
+}
+
+void Idiv::accept(AsmVisitor * v){
+    v->visit(this);
+}
+
 void AsmRet::accept(AsmVisitor* v){
     v->visit(this);
 }

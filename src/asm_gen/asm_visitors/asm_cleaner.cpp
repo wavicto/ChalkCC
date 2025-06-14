@@ -38,9 +38,28 @@ void AsmCleaner::visit(AsmUnary* node){
     delete node;
 }
 
+void AsmCleaner::visit(AsmBinary* node){
+   if (node->src){
+    (node->src)->accept(this);
+   }
+   if (node->dst){
+    (node->dst)->accept(this);
+   }
+   delete node;
+}
+
+void AsmCleaner::visit(Idiv* node){
+    AsmOperand* op_ptr = node->operand_ptr;
+    if (op_ptr){
+        op_ptr->accept(this);
+    }
+    delete node;
+}
+
 void AsmCleaner::visit(AsmRet* node){delete node;}
 void AsmCleaner::visit(StackAllocate* node){delete node;}
 void AsmCleaner::visit(AsmPseudoReg* node){delete node;}
 void AsmCleaner::visit(StackLocation* node){delete node;}
 void AsmCleaner::visit(AsmReg* node){delete node;}
 void AsmCleaner::visit(AsmImm* node){delete node;}
+void AsmCleaner::visit(Cdq* node){delete node;}

@@ -14,7 +14,13 @@ AsmAST::AsmAST(TacAST &tree)
 
     //Third compiler pass that finalizes the assembly instructions
     AsmInstructionFinalizer finalizer(stack_offset);
-    finalizer.visit(root);
+    try {
+        finalizer.visit(root);
+    } 
+    catch (const std::runtime_error& e) {
+        std::cerr << "Instruction Finalizer Error: " << e.what() << std::endl;
+        std::exit(1);
+    }
 }
 
 AsmAST::~AsmAST(){
@@ -139,8 +145,8 @@ void AsmAST::gen(TacBinary* node, std::vector <AsmInstruction*> &instructions){
         else if (node->binary_op == Multiplication){
             binary->op = Mult;
         }
-        binary->left_operand = (node->src_2)->gen(this);
-        binary->right_operand = mov->dst; 
+        binary->src = (node->src_2)->gen(this);
+        binary->dst = mov->dst; 
         instructions.push_back(mov);
         instructions.push_back(binary);
     }
