@@ -58,10 +58,20 @@ void AsmGenerator::visit(AsmBinary* node){
     else if (node->op == Sub){
         file << "\tsubl\t";
     }
+    if (node->src){
+        node->src->accept(this);
+    }
+    file << ", ";
+    if (node->dst){
+        node->dst->accept(this);
+    }
 }
 
 void AsmGenerator::visit(Idiv* node){
-    
+    file << "\tidivl\t";
+    if (node->operand_ptr){
+        node->operand_ptr->accept(this);
+    }
 }
 
 void AsmGenerator::visit(Cdq* node){
