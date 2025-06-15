@@ -4,7 +4,7 @@
 
 It is a toy compiler written for educational purposes, targeting **x86-compatible assembly**.
 
-# Supported Features
+## Supported Features
 
 **chalkcc** currently supports: 
 - Main functions
@@ -24,20 +24,24 @@ Work in Progress:
 - Local variables
 - Logical expressions
 
-# Compiler Pipeline
+## Compiler Pipeline
 1. **Lexer**
+
 Reads a source file and produces a list of tokens.
 
 2. **Parser**
+
 Builds an Abstract Syntax Tree (AST) from tokens using a recursive descent parser with precedence climbing.
 
 3. **Three-Address Code (TAC) IR** 
+
 Produces an intermediate representation from the AST using TAC to simplify analysis and code generation.
 
 4. **Code Generation**
+
 Breaks down the TAC IR further and traverses the structure to generate x86-compatible assembly.
 
-# Build Instructions
+## Build Instructions
 
 To build **chalkcc**:
 ```bash
@@ -52,14 +56,14 @@ flags:
 - `-parse`     Run the lexer and parser. Displays C AST.
 - `-codegen`   Run the lexer, parser, and generate assembly file. Stops before executable generation.
 
-# References
-Jones, J. (2003). Abstract syntax tree implementation idioms. In *Proceedings of the 10th Conference
+## References
+Jones, J. (2003). Abstract Syntax Tree Implementation Idioms. In *Proceedings of the 10th Conference
     on Pattern Languages of Programs (PLoP2003)*. Retrieved from
     http://www.hillside.net/plop/plop2003/Papers/Jones-ImplementingASTs.pdf
 
-Sandler, N. (2024). *Writing a C compiler: Build a real programming language from scratch*. No Starch
+Sandler, N. (2024). *Writing a C Compiler: Build a Real Programming Language From Scratch*. No Starch
     Press. ISBN 978-1718500426
 
-Wang, D. C., Appel, A. W., Korn, J. L., & Serra, C. S. (1997). The Zephyr abstract syntax
-    description language. In *Proceedings of the Conference on Domain-Specific Languages (DSL'97)*
+Wang, D. C., Appel, A. W., Korn, J. L., & Serra, C. S. (1997). The Zephyr Abstract Syntax
+    Description Language. In *Proceedings of the Conference on Domain-Specific Languages (DSL'97)*
     (p. 17). USENIX Association.
