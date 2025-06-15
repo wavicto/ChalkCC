@@ -1,25 +1,65 @@
 # chalkcc
 
-chalkcc is a compiler for a subset of C written in C++.
+**chalkcc** is a compiler for a subset of C, implemented in C++.
 
-chalkcc targets x86 compatible assembly. It is a toy compiler written for an educational purpose.
+It is a toy compiler written for educational purposes, targeting **x86-compatible assembly**.
 
-chalkcc currently supports compilation for: a main function, return statements, constants, unary operators (negation and complement), and binary operators (addition, subtraction, multiplication, division, and modulus).
+# Supported Features
 
-Functionality in progress: local variables and logical expressions
+**chalkcc** currently supports: 
+- Main functions
+- Return statements
+- Constants
+- Unary operators:
+    - Negation `-`
+    - Bitwise complement `~`
+- Binary operators:
+    - Addition `+`
+    - Subtraction `-`
+    - Multiplication `*`
+    - Division `/`
+    - Modulus `%`
 
-# Pipeline
-Lexer: takes a file and produces a list of tokens
-Parser: creates an Abstract Syntax Tree (AST) from the tokens.  Recursive descent parser with precedence climbing
-Three address code (TAC) intermediate representation: 
-Codegen: breaks down the TAC IR even further. traverses this structure to generate assembly.
+Work in Progress: 
+- Local variables
+- Logical expressions
+
+# Compiler Pipeline
+1. **Lexer**
+Reads a source file and produces a list of tokens.
+
+2. **Parser**
+Builds an Abstract Syntax Tree (AST) from tokens using a recursive descent parser with precedence climbing.
+
+3. **Three-Address Code (TAC) IR** 
+Produces an intermediate representation from the AST using TAC to simplify analysis and code generation.
+
+4. **Code Generation**
+Breaks down the TAC IR further and traverses the structure to generate x86-compatible assembly.
+
 # Build Instructions
 
-To compile: make
-./compile [input file] -flags
+To build **chalkcc**:
+```bash
+make
+```
+To compile a source file:
+```bash
+./compile [input_file] [flags]
+```
+flags:
+- `-lex`       Run the lexer. Displays the tokens generated.
+- `-parse`     Run the lexer and parser. Displays C AST.
+- `-codegen`   Run the lexer, parser, and generate assembly file. Stops before executable generation.
 
 # References
+Jones, J. (2003). Abstract syntax tree implementation idioms. In *Proceedings of the 10th Conference
+    on Pattern Languages of Programs (PLoP2003)*. Retrieved from
+    http://www.hillside.net/plop/plop2003/Papers/Jones-ImplementingASTs.pdf
 
-//https://www.cs.princeton.edu/~appel/papers/asdl97.pdf
-//https://hillside.net/plop/plop2003/Papers/Jones-ImplementingASTs.pdf
-Book citation by sandra nora, writing a C compiler.
+Sandler, N. (2024). *Writing a C compiler: Build a real programming language from scratch*. No Starch
+    Press. ISBN 978-1718500426
+
+Wang, D. C., Appel, A. W., Korn, J. L., & Serra, C. S. (1997). The Zephyr abstract syntax
+    description language. In *Proceedings of the Conference on Domain-Specific Languages (DSL'97)*
+    (p. 17). USENIX Association.
