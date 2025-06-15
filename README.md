@@ -24,7 +24,8 @@ Work in Progress:
 - Local variables
 - Logical expressions
 
-## Compiler Pipeline
+## Design
+### Compiler Pipeline
 1. **Lexer**
 
 Reads a source file and produces a list of tokens.
@@ -40,6 +41,10 @@ Produces an intermediate representation from the AST using TAC to simplify analy
 4. **Code Generation**
 
 Breaks down the TAC IR further and traverses the structure to generate x86-compatible assembly.
+
+### Visitor Pattern
+
+**chalkcc** employs the **Visitor Pattern** to traverse and operate upon the nodes of its various structures (AST, IR, etc), allowing chosen functionality to be implemented without modifying the nodes themselves.
 
 ## Build Instructions
 
