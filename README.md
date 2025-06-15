@@ -24,8 +24,25 @@ Work in Progress:
 - Local variables
 - Logical expressions
 
-## Design
+## Build Instructions
+
+To build **chalkcc**:
+```bash
+make
+```
+To compile a source file:
+```bash
+./compile [input_file] [flags]
+```
+flags:
+- `-lex`       Run the lexer. Displays the tokens generated.
+- `-parse`     Run the lexer and parser. Displays C AST.
+- `-codegen`   Run the lexer, parser, and generate assembly file. Stops before executable generation.
+
+## Design and Architecture
+
 ### Compiler Pipeline
+
 1. **Lexer**
 
 Reads a source file and produces a list of tokens.
@@ -45,21 +62,6 @@ Breaks down the TAC IR further and traverses the structure to generate x86-compa
 ### Visitor Pattern
 
 **chalkcc** employs the **Visitor Pattern** to traverse and operate upon the nodes of its various structures (AST, IR, etc), allowing chosen functionality to be implemented without modifying the nodes themselves.
-
-## Build Instructions
-
-To build **chalkcc**:
-```bash
-make
-```
-To compile a source file:
-```bash
-./compile [input_file] [flags]
-```
-flags:
-- `-lex`       Run the lexer. Displays the tokens generated.
-- `-parse`     Run the lexer and parser. Displays C AST.
-- `-codegen`   Run the lexer, parser, and generate assembly file. Stops before executable generation.
 
 ## References
 Jones, J. (2003). Abstract Syntax Tree Implementation Idioms. In *Proceedings of the 10th Conference
