@@ -65,6 +65,7 @@ void AsmGenerator::visit(AsmBinary* node){
     if (node->dst){
         node->dst->accept(this);
     }
+    file << std::endl;
 }
 
 void AsmGenerator::visit(Idiv* node){
@@ -95,6 +96,13 @@ void AsmGenerator::visit(AsmReg* node){
             break;
         case 1: 
             file << "%r10d";
+            break;
+        case 2:
+            file << "%edx";
+            break;
+        case 3:
+            file << "%r11d";
+            break;
     }
 }
 
