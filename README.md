@@ -30,6 +30,14 @@ To build **chalkcc**:
 ```bash
 make
 ```
+To build tests:
+```bash
+make test
+```
+To delete executables:
+```bash
+make clean
+```
 To compile a source file:
 ```bash
 ./compile [input_file] [flags]
