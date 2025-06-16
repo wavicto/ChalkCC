@@ -3,15 +3,14 @@
 
 void TacPrinter::visit(TacProgram* node) {
     std::cout << "Program:" << std::endl;
-    TacFunction* ptr = node->func_ptr;
-    if (ptr) {
-        ptr->accept(this);
+    if (node->func_ptr) {
+        node->func_ptr->accept(this);
     }
 }
 
 void TacPrinter::visit(TacFunction* node) {
     std::cout << "Function: Name: " << node->id << std::endl;
-    for (TacInstruction* instr : node->body) {
+    for (const auto& instr : node->body) {
         if (instr) {
             instr->accept(this);
         }
@@ -20,9 +19,8 @@ void TacPrinter::visit(TacFunction* node) {
 
 void TacPrinter::visit(TacReturn* node) {
     std::cout << "Instruction: Return: ";
-    TacVal* ptr = node->val_ptr;
-    if (ptr) {
-        ptr->accept(this);
+    if (node->val_ptr) {
+        node->val_ptr->accept(this);
     }
 }
 
@@ -43,15 +41,13 @@ void TacPrinter::visit(TacUnary* node) {
     }
 
     std::cout << "\tSRC: ";
-    TacVal* src = node->src;
-    if (src) {
-        src->accept(this);
+    if (node->src) {
+        node->src->accept(this);
     }
 
     std::cout << "\tDST: ";
-    TacVal* dst = node->dst;
-    if (dst) {
-        dst->accept(this);
+    if (node->dst) {
+        node->dst->accept(this);
     }
 }
 
@@ -78,21 +74,18 @@ void TacPrinter::visit(TacBinary* node) {
     }
 
     std::cout << "\tSRC_1: ";
-    TacVal* src_1 = node->src_1;
-    if (src_1) {
-        src_1->accept(this);
+    if (node->src_1) {
+        node->src_1->accept(this);
     }
 
     std::cout << "\tSRC_2: ";
-    TacVal* src_2 = node->src_2;
-    if (src_2) {
-        src_2->accept(this);
+    if (node->src_2) {
+        node->src_2->accept(this);
     }
 
     std::cout << "\tDST: ";
-    TacVal* dst = node->dst;
-    if (dst) {
-        dst->accept(this);
+    if (node->dst) {
+        node->dst->accept(this);
     }
 }
 

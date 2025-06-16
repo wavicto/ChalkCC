@@ -10,7 +10,7 @@ AST::AST(std::vector<Token>& tokens)
     precedence_map.insert({Negation, 45});   
      
     try {
-    root->func_ptr = parse_function(tokens);
+    root->func_ptr = std::unique_ptr<Function>(parse_function(tokens));
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Parser error: " << e.what() << std::endl;
@@ -18,18 +18,13 @@ AST::AST(std::vector<Token>& tokens)
     }
 }
 
-AST::~AST(){
-    CCleaner cleaner;
-    cleaner.visit(this->root);
-}
-
 void AST::print(){
     CPrinter printer;
-    printer.visit(this->root);
+    printer.visit(root.get());
 }
 
 Program* AST::get_root(){
-    return root;
+    return root.get();
 }
 
 Function* AST::parse_function(std::vector<Token>& tokens) {
@@ -50,7 +45,7 @@ Function* AST::parse_function(std::vector<Token>& tokens) {
     
     tokens.erase(tokens.begin(), tokens.begin() + 6);
 
-    func->state_ptr = parse_statement(tokens);
+    func->state_ptr = std::unique_ptr<Statement>(parse_statement(tokens));
 
     if (tokens[0].expect(Close_brace)){
         tokens.erase(tokens.begin());
@@ -70,7 +65,7 @@ Statement* AST::parse_statement(std::vector<Token>& tokens){
 
     tokens.erase(tokens.begin());
 
-    state->exp_ptr = parse_expression(tokens, 0);
+    state->exp_ptr = std::unique_ptr<Expression>(parse_expression(tokens, 0));
 
     if(!tokens[0].expect(Semicolon)){
         throw std::runtime_error("Expected ;");
@@ -124,8 +119,8 @@ Expression* AST::parse_expression(std::vector<Token>& tokens, int min_precedence
         int prec =  precedence_map[b_op->op];
         tokens.erase(tokens.begin());
         //prec + 1 enforces left-associativity
-        b_op->exp_right = parse_expression(tokens, prec + 1);
-        b_op->exp_left = left_exp;
+        b_op->exp_right = std::unique_ptr<Expression>(parse_expression(tokens, prec + 1));
+        b_op->exp_left = std::unique_ptr<Expression>(left_exp);
         //Updates for left-associativity
         left_exp = b_op;
     }
@@ -142,10 +137,9 @@ UnaryOp* AST::parse_unary(std::vector<Token>& tokens){
         ptr->type = Complement;
         tokens.erase(tokens.begin());
     }
-    ptr->exp_ptr = parse_factor(tokens);
+    ptr->exp_ptr = std::unique_ptr<Expression>(parse_factor(tokens));
     return ptr;
 }
-
 
 Constant* AST::parse_constant(std::vector<Token>& tokens){
     Constant* c = new Constant;

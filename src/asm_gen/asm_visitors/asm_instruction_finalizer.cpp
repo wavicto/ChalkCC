@@ -59,7 +59,7 @@ void AsmInstructionFinalizer::visit(AsmMov* node) {
 }
 
 //Add and sub instructions can't have memory addresses as both operands
-//Multiplication can't have memeory addresses as its dst operand
+//Multiplication can't have memory addresses as its dst operand
 void AsmInstructionFinalizer::visit(AsmBinary* node) {
     auto src = dynamic_cast<StackLocation*>(node->src);
     auto dst = dynamic_cast<StackLocation*>(node->dst);
@@ -83,6 +83,7 @@ void AsmInstructionFinalizer::visit(AsmBinary* node) {
             AsmMov* mov_2 = new AsmMov;
             mov_2->src = scratch_three;
             mov_2->dst = mov_1->src;
+            //problem here^^
 
             //Replaces instructions in the list
             for (auto it = instructions->begin(); it != instructions->end(); ++it){

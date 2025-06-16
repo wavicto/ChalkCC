@@ -6,7 +6,6 @@
 #include "asm_gen/asm_visitors/asm_pseudo_locator.hpp"
 #include "asm_gen/asm_visitors/asm_instruction_finalizer.hpp"
 #include "asm_gen/asm_visitors/asm_generator.hpp"
-#include "asm_gen/asm_visitors/asm_cleaner.hpp"
 #include "ir_gen/tac_node.hpp"
 
 //Forward declaration
@@ -17,8 +16,6 @@ class AsmAST {
 
     //Initalizes AsmAST from TacAST
     AsmAST(TacAST &tree);
-
-    ~AsmAST();
 
     //Generates assembly from AsmAST
     void asm_gen();

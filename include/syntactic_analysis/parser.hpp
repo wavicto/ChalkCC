@@ -3,7 +3,6 @@
 
 #include "lexical_analysis/lexer.hpp"
 #include "syntactic_analysis/c_node.hpp"
-#include "syntactic_analysis/c_visitors/c_cleaner.hpp"
 #include "syntactic_analysis/c_visitors/c_printer.hpp"
 #include <unordered_map>
 
@@ -13,17 +12,14 @@ class AST {
     //Initializes C AST
     AST(std::vector<Token>& tokens);
 
-    ~AST();
-
     //Prints the C AST structure
     void print();
 
     //RETURNS: the root program node
     Program* get_root();
 
-
     private:
-    Program* root;
+    std::unique_ptr<Program> root;
     std::unordered_map <TokenType, int> precedence_map;
     
     //Heper functions used to generate C AST from tokens

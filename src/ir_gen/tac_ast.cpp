@@ -1,68 +1,52 @@
 #include "ir_gen/tac_ast.hpp"
 
-TacAST::~TacAST(){
-    TacCleaner cleaner;
-    cleaner.visit(root);
-    clean_temp_var();
-}
-
 TacAST::TacAST(AST &tree)
 :temp_var_count(0)
 {
-    root = gen(tree.get_root());
+    root = std::unique_ptr<TacProgram>(gen(tree.get_root()));
 }
 
 TacProgram* TacAST::get_root(){
-    return root;
-}
-
-void TacAST::clean_temp_var(){
-    for (auto ptr : temp_vars){
-        delete ptr;
-    }
+    return root.get();
 }
 
 TacProgram* TacAST::gen(Program* node){
     TacProgram* program = new TacProgram;
-    program->func_ptr = gen(node->func_ptr);
+    program->func_ptr = std::unique_ptr<TacFunction>(gen(node->func_ptr.get()));
     return program;
 }
 
 TacFunction* TacAST::gen(Function* node){
     TacFunction* func = new TacFunction;
     func->id = node->name;
-    gen(node->state_ptr, func->body);
+    gen(node->state_ptr.get(), func->body);
     return func;
 }
 
-void TacAST::gen(Statement* node, std::vector<TacInstruction*>& body){
+void TacAST::gen(Statement* node, std::vector<std::unique_ptr<TacInstruction>>& body){
     TacReturn* ret = new TacReturn;
-    Expression* exp_ptr = node->exp_ptr;
-    ret->val_ptr = exp_ptr->gen(this, body);
-    body.push_back(ret);
+    ret->val_ptr = std::unique_ptr<TacVal>(node->exp_ptr->gen(this, body));
+    body.push_back(std::unique_ptr<TacInstruction>(ret));
 }
 
-TacVal* TacAST::gen(UnaryOp* node, std::vector<TacInstruction*>& body){
+TacVal* TacAST::gen(UnaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body){
     TacUnary* unary = new TacUnary;
     unary->op = node->type;
-    Expression* exp_ptr = node->exp_ptr;
     //Recursive call so that the inner most node is created first
-    unary->src = exp_ptr->gen(this, body);
-    unary->dst = make_temp_var();
-    temp_vars.push_back(unary->dst);
-    body.push_back(unary);
-    return unary->dst;
+    unary->src = std::shared_ptr<TacVal>(node->exp_ptr->gen(this, body));
+    unary->dst = std::shared_ptr<TacVal>(make_temp_var());
+    body.push_back(std::unique_ptr<TacInstruction>(unary));
+    return unary->dst.get();
 }
 
-TacVal* TacAST::gen(BinaryOp* node, std::vector<TacInstruction*>& body){
+TacVal* TacAST::gen(BinaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body){
     TacBinary* binary = new TacBinary;
-    binary->src_1 = (node->exp_left)->gen(this, body);
-    binary->src_2 = (node->exp_right)->gen(this, body);
-    binary->dst = make_temp_var();
-    temp_vars.push_back(binary->dst);
+    binary->src_1 = std::shared_ptr<TacVal>((node->exp_left)->gen(this, body));
+    binary->src_2 = std::shared_ptr<TacVal>((node->exp_right)->gen(this, body));
+    binary->dst = std::shared_ptr<TacVal>(make_temp_var());
     binary->binary_op = node->op;
-    body.push_back(binary);
-    return binary->dst;
+    body.push_back(std::unique_ptr<TacInstruction>(binary));
+    return binary->dst.get();
 }
 
 TacConstant* TacAST::gen(Constant* node){
@@ -80,5 +64,5 @@ TacVar* TacAST::make_temp_var(){
 
 void TacAST::print(){
     TacPrinter p;
-    p.visit(root);
+    p.visit(root.get());
 }

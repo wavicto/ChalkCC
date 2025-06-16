@@ -33,14 +33,14 @@ class AsmNode {
 class AsmProgram : public AsmNode {
     public:
     virtual void accept(AsmVisitor* v) override;
-    AsmFunction* func_ptr;
+    std::unique_ptr<AsmFunction> func_ptr;
 };
 
 class AsmFunction : public AsmNode {
     public:
     virtual void accept(AsmVisitor* v) override;
     std::string name;
-    std::vector <AsmInstruction*> instructions;
+    std::vector <std::unique_ptr<AsmInstruction>> instructions;
 };
 
 class AsmInstruction : public AsmNode {
@@ -51,8 +51,8 @@ class AsmInstruction : public AsmNode {
 class AsmMov : public AsmInstruction {
     public:
     virtual void accept(AsmVisitor* v) override;
-    AsmOperand* src;
-    AsmOperand* dst;
+    std::shared_ptr<AsmOperand> src;
+    std::shared_ptr<AsmOperand> dst;
 };
 
 class AsmRet : public AsmInstruction {
@@ -64,7 +64,7 @@ class AsmUnary : public AsmInstruction {
     public:
     virtual void accept(AsmVisitor* v) override;
     UnaryOperator op;
-    AsmOperand* operand_ptr;
+    std::shared_ptr<AsmOperand> operand_ptr;
 };
 
 class AsmBinary : public AsmInstruction {
@@ -72,15 +72,15 @@ class AsmBinary : public AsmInstruction {
     virtual void accept(AsmVisitor* v) override;
 
     BinaryOperator op;
-    AsmOperand* src;
-    AsmOperand* dst;
+    std::shared_ptr<AsmOperand> src;
+    std::shared_ptr<AsmOperand> dst;
 };
 
 class Idiv : public AsmInstruction {
     public:
     virtual void accept(AsmVisitor* v) override;
 
-    AsmOperand* operand_ptr;
+    std::shared_ptr<AsmOperand> operand_ptr;
 };
 
 class Cdq : public AsmInstruction {

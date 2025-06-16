@@ -2,6 +2,7 @@
 #define C_NODE_HPP
 
 #include <string>
+#include <memory>
 #include "syntactic_analysis/c_visitors/c_visitor.hpp"
 #include "ir_gen/tac_node.hpp"
 #include "ir_gen/tac_ast.hpp"
@@ -19,14 +20,14 @@ class Program : public ASTNode {
     public:
     virtual void accept(CVisitor* v) override;
 
-    Function* func_ptr;
+    std::unique_ptr<Function> func_ptr;
 };
 
 class Function : public ASTNode {
     public:
     virtual void accept(CVisitor* v) override;
 
-    Statement* state_ptr;
+    std::unique_ptr<Statement> state_ptr;
     std::string name;
 };
 
@@ -34,20 +35,20 @@ class Statement: public ASTNode {
     public:
     virtual void accept(CVisitor* v) override;
 
-    Expression* exp_ptr;
+    std::unique_ptr<Expression> exp_ptr;
 };
 
 class Expression: public ASTNode {
     public:
     virtual void accept(CVisitor* v) = 0;
     //Asists with TAC_AST generation through polymorphism
-    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) = 0;
+    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) = 0;
 };
 
 class Constant : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     int value;
 };
@@ -55,22 +56,21 @@ class Constant : public Expression {
 class UnaryOp : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     TokenType type;
-    Expression* exp_ptr;
+    std::unique_ptr<Expression> exp_ptr;
 };
 
 class BinaryOp : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<TacInstruction*>& body) override;
+    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     //Negation is interpreted the same as subtraction
     TokenType op;
-    Expression* exp_left;
-    Expression* exp_right;
+    std::unique_ptr<Expression> exp_left;
+    std::unique_ptr<Expression> exp_right;
 };
-
 
 #endif

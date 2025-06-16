@@ -45,9 +45,8 @@ void AsmAST::clean_map(){
 
 AsmProgram* AsmAST::gen(TacProgram* node){
     AsmProgram* root = new AsmProgram;
-    TacFunction* ptr = node->func_ptr;
-    if (ptr){
-        root->func_ptr = gen(ptr);
+    if (node->func_ptr){
+        root->func_ptr = gen(node->func_ptr.get());
     }
     return root;
 }
@@ -63,8 +62,7 @@ AsmFunction* AsmAST::gen(TacFunction* node){
 
 void AsmAST::gen(TacReturn* node, std::vector <AsmInstruction*> &instructions) {
     AsmMov* mov = new AsmMov;
-    TacVal* val = node->val_ptr;
-    mov->src = val->gen(this);
+    mov->src = node->val_ptr->gen(this);
     AsmReg* dst = new AsmReg;
     dst->name = AX;
     mov->dst = dst;
@@ -75,10 +73,8 @@ void AsmAST::gen(TacReturn* node, std::vector <AsmInstruction*> &instructions) {
 
 void AsmAST::gen(TacUnary* node, std::vector <AsmInstruction*> &instructions){
     AsmMov* mov = new AsmMov;
-    TacVal* src = node->src;
-    TacVal* dst = node->dst;
-    mov->src = src->gen(this);
-    mov->dst = dst->gen(this);
+    mov->src = node->src->gen(this);
+    mov->dst = node->dst->gen(this);
 
     AsmUnary* unary_ptr = new AsmUnary;
     if (node->op == Complement){
@@ -151,7 +147,6 @@ void AsmAST::gen(TacBinary* node, std::vector <AsmInstruction*> &instructions){
         instructions.push_back(binary);
     }
 }
-
 
 AsmOperand* AsmAST::gen(TacConstant* node){
     AsmImm* literal = new AsmImm;

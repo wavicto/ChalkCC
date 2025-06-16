@@ -3,80 +3,81 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "lexical_analysis/token.hpp"
 #include "ir_gen/tac_visitors/tac_visitor.hpp"
 #include "asm_gen/asm_node.hpp"
 #include "asm_gen/codegen.hpp"
 
-//Forward declaration
+// Forward declaration
 class AsmAST;
 
 class TacNode {
-    public:
+public:
     virtual void accept(TacVisitor* v) = 0;
     virtual ~TacNode();
 };
 
 class TacProgram : public TacNode {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
 
-    TacFunction* func_ptr;
+    std::unique_ptr<TacFunction> func_ptr;
 };
 
 class TacFunction : public TacNode {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
 
     std::string id;
-    std::vector<TacInstruction*> body;
+    std::vector<std::unique_ptr<TacInstruction>> body;
 };
 
 class TacInstruction : public TacNode {
-    public:
+public:
     virtual void accept(TacVisitor* v) = 0;
-    //Asists AsmAST generation through polymorphism on children classes
-    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) = 0;
+    // Assists AsmAST generation through polymorphism on children classes
+    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) = 0;
 };
 
 class TacReturn : public TacInstruction {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
 
-    TacVal* val_ptr;
+    std::unique_ptr<TacVal> val_ptr;
 };
 
-class TacUnary : public TacInstruction{
-    public:
+class TacUnary : public TacInstruction {
+public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
 
     TokenType op;
-    TacVal* src;
-    TacVal* dst;
+    std::shared_ptr<TacVal> src;
+    std::shared_ptr<TacVal> dst;
 };
 
 class TacBinary : public TacInstruction {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector <AsmInstruction*> &instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
 
     TokenType binary_op;
-    TacVal* src_1;
-    TacVal* src_2;
-    TacVal* dst;
+    std::shared_ptr<TacVal> src_1;
+    std::shared_ptr<TacVal> src_2;
+    std::shared_ptr<TacVal> dst;
 };
 
 class TacVal : public TacNode {
-    public:
+public:
     virtual void accept(TacVisitor* v) = 0;
-    //Asists AsmAST generation through polymorphism on children classes
+    // Assists AsmAST generation through polymorphism on children classes
     virtual AsmOperand* gen(AsmAST* tree) = 0;
 };
 
 class TacConstant : public TacVal {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
     virtual AsmOperand* gen(AsmAST* tree) override;
 
@@ -84,7 +85,7 @@ class TacConstant : public TacVal {
 };
 
 class TacVar : public TacVal {
-    public:
+public:
     virtual void accept(TacVisitor* v) override;
     virtual AsmOperand* gen(AsmAST* tree) override;
 

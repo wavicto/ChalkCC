@@ -2,7 +2,6 @@
 #define TAC_TREE_HPP
 
 #include "ir_gen/tac_node.hpp"
-#include "ir_gen/tac_visitors/tac_cleaner.hpp"
 #include "ir_gen/tac_visitors/tac_printer.hpp"
 #include "syntactic_analysis/parser.hpp"
 #include "syntactic_analysis/c_node.hpp"
@@ -16,8 +15,6 @@ class TacAST {
     //Initalizes TacAST from C AST
     TacAST(AST &tree);
 
-    ~TacAST();
-
     //Prints TacAST structure
     void print();
 
@@ -25,21 +22,19 @@ class TacAST {
     TacProgram* get_root(); 
 
     private:
-    TacProgram* root;
+    std::unique_ptr<TacProgram> root;
     int temp_var_count;
-    std::vector <TacVal*> temp_vars;
 
     //Helper functions to generate TacAST from C AST traversal
     TacProgram* gen(Program* node);
     TacFunction* gen(Function* node);
-    void gen(Statement* node, std::vector<TacInstruction*>& body);
-    TacVal* gen(UnaryOp* node, std::vector<TacInstruction*>& body);
-    TacVal* gen(BinaryOp* node, std::vector<TacInstruction*>& body);
+    void gen(Statement* node, std::vector<std::unique_ptr<TacInstruction>>& body);
+    TacVal* gen(UnaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
+    TacVal* gen(BinaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
     TacConstant* gen(Constant* node);
 
+    //Makes a temp var
     TacVar* make_temp_var();
-    //MODIFIES: clean up temp_vars as its nodes can be shared among multiple TacInstructions
-    void clean_temp_var();
 
     //Asists with TacAST generation
     friend class BinaryOp;

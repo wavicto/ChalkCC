@@ -73,6 +73,7 @@ void AsmGenerator::visit(Idiv* node){
     if (node->operand_ptr){
         node->operand_ptr->accept(this);
     }
+    file << std::endl;
 }
 
 void AsmGenerator::visit(Cdq* node){
