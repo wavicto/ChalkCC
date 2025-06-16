@@ -9,13 +9,12 @@ AsmAST::AsmAST(TacAST &tree)
 
     //Second compiler pass that sets pseudo registers to actual stack locations
     AsmPseudoLocator locator(pseudo_map);
-    locator.visit(root);
-    clean_map();
+    locator.visit(root.get());
 
     //Third compiler pass that finalizes the assembly instructions
     AsmInstructionFinalizer finalizer(stack_offset);
     try {
-        finalizer.visit(root);
+        finalizer.visit(root.get());
     } 
     catch (const std::runtime_error& e) {
         std::cerr << "Instruction Finalizer Error: " << e.what() << std::endl;
@@ -23,36 +22,25 @@ AsmAST::AsmAST(TacAST &tree)
     }
 }
 
-AsmAST::~AsmAST(){
-    AsmCleaner worker;
-    worker.visit(this->root);
-}
-
 void AsmAST::asm_gen(){
     AsmGenerator generator;
-    generator.visit(this->root);
+    generator.visit(root.get());
 }
 
-std::unordered_map<AsmPseudoReg*, int> AsmAST::get_pseudo_map(){
+std::unordered_map<std::shared_ptr<AsmPseudoReg>, int> AsmAST::get_pseudo_map(){
     return pseudo_map;
 }
 
-void AsmAST::clean_map(){
-    for (auto &ptr : pseudo_map){
-        delete ptr.first;
-    }
-}
-
-AsmProgram* AsmAST::gen(TacProgram* node){
-    AsmProgram* root = new AsmProgram;
+std::unique_ptr<AsmProgram> AsmAST::gen(TacProgram* node){
+    auto root = std::make_unique<AsmProgram>();
     if (node->func_ptr){
         root->func_ptr = gen(node->func_ptr.get());
     }
     return root;
 }
 
-AsmFunction* AsmAST::gen(TacFunction* node){
-    AsmFunction* func = new AsmFunction;
+std::unique_ptr<AsmFunction> AsmAST::gen(TacFunction* node){
+    auto func = std::make_unique<AsmFunction>();
     func->name = node->id;
     for (auto& instruction : node->body){
         instruction->gen(this, func->instructions);
@@ -60,23 +48,23 @@ AsmFunction* AsmAST::gen(TacFunction* node){
     return func;
 }
 
-void AsmAST::gen(TacReturn* node, std::vector <AsmInstruction*> &instructions) {
-    AsmMov* mov = new AsmMov;
+void AsmAST::gen(TacReturn* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions) {
+    auto mov = std::make_unique<AsmMov>();
     mov->src = node->val_ptr->gen(this);
-    AsmReg* dst = new AsmReg;
+    auto dst = std::make_unique<AsmReg>();;
     dst->name = AX;
-    mov->dst = dst;
+    mov->dst = std::move(dst);
 
-    instructions.push_back(mov);
-    instructions.push_back(new AsmRet);
+    instructions.push_back(std::move(mov));
+    instructions.push_back(std::make_unique<AsmRet>());
 }
 
-void AsmAST::gen(TacUnary* node, std::vector <AsmInstruction*> &instructions){
-    AsmMov* mov = new AsmMov;
+void AsmAST::gen(TacUnary* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions){
+    auto mov = std::make_unique<AsmMov>();
     mov->src = node->src->gen(this);
     mov->dst = node->dst->gen(this);
 
-    AsmUnary* unary_ptr = new AsmUnary;
+    auto unary_ptr = std::make_unique<AsmUnary>();
     if (node->op == Complement){
         unary_ptr->op = Not;
     }
@@ -84,54 +72,50 @@ void AsmAST::gen(TacUnary* node, std::vector <AsmInstruction*> &instructions){
         unary_ptr->op = Neg;
     }
     unary_ptr->operand_ptr = mov->dst;
-    instructions.push_back(mov);
-    instructions.push_back(unary_ptr);
+    instructions.push_back(std::move(mov));
+    instructions.push_back(std::move(unary_ptr));
 }
 
-void AsmAST::gen(TacBinary* node, std::vector <AsmInstruction*> &instructions){
+void AsmAST::gen(TacBinary* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions){
     if (node->binary_op == Division){
-        AsmMov* mov_1 = new AsmMov;
-        AsmMov* mov_2 = new AsmMov;
-        Cdq* cdq = new Cdq;
-        Idiv* div = new Idiv;
-        AsmReg* one = new AsmReg;
-        AsmReg* two = new AsmReg;
-        one->name = AX;
-        two->name = AX;
+        auto mov_1 = std::make_unique<AsmMov>();
+        auto mov_2 = std::make_unique<AsmMov>();
+        auto div = std::make_unique<Idiv>();
+        auto reg = std::make_shared<AsmReg>();
+        reg->name = AX;
         mov_1->src = (node->src_1)->gen(this);
-        mov_1->dst = one;
+        mov_1->dst = reg;
         div->operand_ptr = (node->src_2)->gen(this);
-        mov_2->src = two;
+        mov_2->src = reg;
         mov_2->dst = (node->dst)->gen(this);
-        instructions.push_back(mov_1);
-        instructions.push_back(cdq);
-        instructions.push_back(div);
-        instructions.push_back(mov_2);
+        instructions.push_back(std::move(mov_1));
+        instructions.push_back(std::make_unique<Cdq>());
+        instructions.push_back(std::move(div));
+        instructions.push_back(std::move(mov_2));
     }
     else if (node->binary_op == Modulus){
-        AsmMov* mov_1 = new AsmMov;
-        AsmMov* mov_2 = new AsmMov;
-        Cdq* cdq = new Cdq;
-        Idiv* div = new Idiv;
-        AsmReg* one = new AsmReg;
-        AsmReg* two = new AsmReg;
-        one->name = AX;
-        two->name = DX;
+        auto mov_1 = std::make_unique<AsmMov>();
+        auto mov_2 = std::make_unique<AsmMov>();
+        auto div = std::make_unique<Idiv>();
+        auto reg_one = std::make_shared<AsmReg>();
+        auto reg_two = std::make_shared<AsmReg>();
+        reg_one->name = AX;
+        reg_two->name = DX;
         mov_1->src = (node->src_1)->gen(this);
-        mov_1->dst = one;
+        mov_1->dst = reg_one;
         div->operand_ptr = (node->src_2)->gen(this);
-        mov_2->src = two;
+        mov_2->src = reg_two;
         mov_2->dst = (node->dst)->gen(this);
-        instructions.push_back(mov_1);
-        instructions.push_back(cdq);
-        instructions.push_back(div);
-        instructions.push_back(mov_2);
+        instructions.push_back(std::move(mov_1));
+        instructions.push_back(std::make_unique<Cdq>());
+        instructions.push_back(std::move(div));
+        instructions.push_back(std::move(mov_2));
     }
     else {
-        AsmMov* mov = new AsmMov;
+        auto mov = std::make_unique<AsmMov>();
         mov->src = (node->src_1)->gen(this);
         mov->dst = (node->dst)->gen(this);
-        AsmBinary* binary = new AsmBinary;
+        auto binary =  std::make_unique<AsmBinary>();
         if (node->binary_op == Addition){
             binary->op = Add;
         }
@@ -143,18 +127,18 @@ void AsmAST::gen(TacBinary* node, std::vector <AsmInstruction*> &instructions){
         }
         binary->src = (node->src_2)->gen(this);
         binary->dst = mov->dst; 
-        instructions.push_back(mov);
-        instructions.push_back(binary);
+        instructions.push_back(std::move(mov));
+        instructions.push_back(std::move(binary));
     }
 }
 
-AsmOperand* AsmAST::gen(TacConstant* node){
-    AsmImm* literal = new AsmImm;
+std::shared_ptr<AsmImm> AsmAST::gen(TacConstant* node){
+    auto literal = std::make_shared<AsmImm>();
     literal->value = node->value;
     return literal;
 }
 
-AsmOperand* AsmAST::gen(TacVar* node){
+std::shared_ptr<AsmPseudoReg> AsmAST::gen(TacVar* node){
     //Checks to see if the node has been previously assigned a pseudo register
     //Due to how TacVar nodes can be shared by multiple tac_instructions
     for (auto &element : pseudo_map){
@@ -162,7 +146,7 @@ AsmOperand* AsmAST::gen(TacVar* node){
             return element.first;
         }
     }
-    AsmPseudoReg* r = new AsmPseudoReg;
+    auto r = std::make_shared<AsmPseudoReg>();
     r->id = node->name;
     stack_offset -= 4;
     pseudo_map.insert({r, stack_offset});

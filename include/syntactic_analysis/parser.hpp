@@ -22,15 +22,15 @@ class AST {
     std::unique_ptr<Program> root;
     std::unordered_map <TokenType, int> precedence_map;
     
-    //Heper functions used to generate C AST from tokens
-    Function* parse_function(std::vector<Token>& tokens);
-    Statement* parse_statement(std::vector<Token>& token);
-    //Factors are constants, unary expressions, or parenthesized expressions
-    //Used to help implement precedence climbing
-    Expression* parse_factor(std::vector<Token>& tokens);
-    Expression* parse_expression(std::vector<Token>& tokens, int min_precedence);
-    UnaryOp* parse_unary(std::vector<Token>& tokens);
-    Constant* parse_constant(std::vector<Token>& tokens);
+    // Helper functions used to generate C AST from tokens
+    std::unique_ptr<Function> parse_function(std::vector<Token>& tokens);
+    std::unique_ptr<Statement> parse_statement(std::vector<Token>& tokens);
+    // Factors are constants, unary expressions, or parenthesized expressions
+    // Used to help implement precedence climbing
+    std::unique_ptr<Expression> parse_factor(std::vector<Token>& tokens);
+    std::unique_ptr<Expression> parse_expression(std::vector<Token>& tokens, int min_precedence);
+    std::unique_ptr<UnaryOp> parse_unary(std::vector<Token>& tokens);
+    std::unique_ptr<Constant> parse_constant(std::vector<Token>& tokens);
 };
 
 #endif

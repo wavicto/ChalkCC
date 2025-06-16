@@ -42,13 +42,13 @@ class Expression: public ASTNode {
     public:
     virtual void accept(CVisitor* v) = 0;
     //Asists with TAC_AST generation through polymorphism
-    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) = 0;
+    virtual std::shared_ptr<TacVal> gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) = 0;
 };
 
 class Constant : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
+    virtual std::shared_ptr<TacVal> gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     int value;
 };
@@ -56,7 +56,7 @@ class Constant : public Expression {
 class UnaryOp : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
+    virtual std::shared_ptr<TacVal> gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     TokenType type;
     std::unique_ptr<Expression> exp_ptr;
@@ -65,7 +65,7 @@ class UnaryOp : public Expression {
 class BinaryOp : public Expression {
     public:
     virtual void accept(CVisitor* v) override;
-    virtual TacVal* gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
+    virtual std::shared_ptr<TacVal> gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body) override;
 
     //Negation is interpreted the same as subtraction
     TokenType op;

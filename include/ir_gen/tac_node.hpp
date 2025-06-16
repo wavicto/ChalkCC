@@ -37,21 +37,21 @@ class TacInstruction : public TacNode {
 public:
     virtual void accept(TacVisitor* v) = 0;
     // Assists AsmAST generation through polymorphism on children classes
-    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) = 0;
+    virtual void gen(AsmAST* tree, std::vector<std::unique_ptr<AsmInstruction>> &instructions) = 0;
 };
 
 class TacReturn : public TacInstruction {
 public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<std::unique_ptr<AsmInstruction>> &instructions) override;
 
-    std::unique_ptr<TacVal> val_ptr;
+    std::shared_ptr<TacVal> val_ptr;
 };
 
 class TacUnary : public TacInstruction {
 public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<std::unique_ptr<AsmInstruction>> &instructions) override;
 
     TokenType op;
     std::shared_ptr<TacVal> src;
@@ -61,7 +61,7 @@ public:
 class TacBinary : public TacInstruction {
 public:
     virtual void accept(TacVisitor* v) override;
-    virtual void gen(AsmAST* tree, std::vector<AsmInstruction*>& instructions) override;
+    virtual void gen(AsmAST* tree, std::vector<std::unique_ptr<AsmInstruction>> &instructions) override;
 
     TokenType binary_op;
     std::shared_ptr<TacVal> src_1;
@@ -73,13 +73,13 @@ class TacVal : public TacNode {
 public:
     virtual void accept(TacVisitor* v) = 0;
     // Assists AsmAST generation through polymorphism on children classes
-    virtual AsmOperand* gen(AsmAST* tree) = 0;
+    virtual std::shared_ptr<AsmOperand> gen(AsmAST* tree) = 0;
 };
 
 class TacConstant : public TacVal {
 public:
     virtual void accept(TacVisitor* v) override;
-    virtual AsmOperand* gen(AsmAST* tree) override;
+    virtual std::shared_ptr<AsmOperand> gen(AsmAST* tree) override;
 
     int value;
 };
@@ -87,7 +87,7 @@ public:
 class TacVar : public TacVal {
 public:
     virtual void accept(TacVisitor* v) override;
-    virtual AsmOperand* gen(AsmAST* tree) override;
+    virtual std::shared_ptr<AsmOperand> gen(AsmAST* tree) override;
 
     std::string name;
 };

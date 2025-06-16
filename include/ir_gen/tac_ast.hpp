@@ -26,15 +26,16 @@ class TacAST {
     int temp_var_count;
 
     //Helper functions to generate TacAST from C AST traversal
-    TacProgram* gen(Program* node);
-    TacFunction* gen(Function* node);
+    //Raw ptrs are passed as ownership is not transferred.
+    std::unique_ptr<TacProgram> gen(Program* node);
+    std::unique_ptr<TacFunction> gen(Function* node);
     void gen(Statement* node, std::vector<std::unique_ptr<TacInstruction>>& body);
-    TacVal* gen(UnaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
-    TacVal* gen(BinaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
-    TacConstant* gen(Constant* node);
+    std::shared_ptr<TacVal> gen(UnaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
+    std::shared_ptr<TacVal> gen(BinaryOp* node, std::vector<std::unique_ptr<TacInstruction>>& body);
+    std::shared_ptr<TacConstant> gen(Constant* node);
 
     //Makes a temp var
-    TacVar* make_temp_var();
+    std::shared_ptr<TacVar> make_temp_var();
 
     //Asists with TacAST generation
     friend class BinaryOp;

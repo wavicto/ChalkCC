@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include <memory>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Class for third compiler pass
@@ -28,7 +29,7 @@ class AsmInstructionFinalizer: public AsmVisitor {
 
     private:
     int stack_size;
-    std::vector <AsmInstruction*> *instructions;
+    std::vector <std::unique_ptr<AsmInstruction>> *instructions;
 };
 
 #endif

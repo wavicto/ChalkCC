@@ -26,15 +26,15 @@ void Constant::accept(CVisitor* v){
     v->visit(this);
 }
 
-TacVal* Constant::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
+std::shared_ptr<TacVal> Constant::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
     return tree->gen(this);
 }
 
-TacVal* UnaryOp::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
+std::shared_ptr<TacVal> UnaryOp::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
     return tree->gen(this, body);
 }
 
-TacVal* BinaryOp::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
+std::shared_ptr<TacVal> BinaryOp::gen(TacAST* tree, std::vector<std::unique_ptr<TacInstruction>>& body){
     return tree->gen(this, body);
 }
 

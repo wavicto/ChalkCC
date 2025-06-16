@@ -22,24 +22,21 @@ class AsmAST {
 
     //Returns: map of pseudo registers with their respective stack_offset
     //Helper method for second compiler pass that allocates stack locations for pseudo registers
-    std::unordered_map<AsmPseudoReg*, int> get_pseudo_map();
+    std::unordered_map<std::shared_ptr<AsmPseudoReg>, int> get_pseudo_map();
 
     private:
-    AsmProgram* root;
+    std::unique_ptr<AsmProgram> root;
     int stack_offset;
-    std::unordered_map<AsmPseudoReg*, int> pseudo_map;
-    
-    //Cleans up pseudo registers after they are replaced by a stack location
-    void clean_map();
+    std::unordered_map<std::shared_ptr<AsmPseudoReg>, int> pseudo_map;
 
     //Helper functions that generates AsmAST by traversing through TacAST
-    AsmProgram* gen(TacProgram* node);
-    AsmFunction* gen(TacFunction* node);
-    void gen(TacReturn* node, std::vector <AsmInstruction*> &instructions);
-    void gen(TacUnary* node, std::vector <AsmInstruction*> &instructions);
-    void gen(TacBinary* node, std::vector <AsmInstruction*> &instructions);
-    AsmOperand* gen(TacConstant* node);
-    AsmOperand* gen(TacVar* node);
+    std::unique_ptr<AsmProgram> gen(TacProgram* node);
+    std::unique_ptr<AsmFunction> gen(TacFunction* node);
+    void gen(TacReturn* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions);
+    void gen(TacUnary* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions);
+    void gen(TacBinary* node, std::vector<std::unique_ptr<AsmInstruction>> &instructions);
+    std::shared_ptr<AsmImm> gen(TacConstant* node);
+    std::shared_ptr<AsmPseudoReg> gen(TacVar* node);
 
     //Asists with AsmAST generation
     friend class TacReturn;

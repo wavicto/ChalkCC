@@ -1,7 +1,7 @@
 #include "syntactic_analysis/parser.hpp"
 
 AST::AST(std::vector<Token>& tokens)
-    :root(new Program)
+    :root(std::make_unique<Program>())
 {
     precedence_map.insert({Multiplication, 50});
     precedence_map.insert({Division, 50});
@@ -10,7 +10,7 @@ AST::AST(std::vector<Token>& tokens)
     precedence_map.insert({Negation, 45});   
      
     try {
-    root->func_ptr = std::unique_ptr<Function>(parse_function(tokens));
+    root->func_ptr = parse_function(tokens);
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Parser error: " << e.what() << std::endl;
@@ -27,8 +27,8 @@ Program* AST::get_root(){
     return root.get();
 }
 
-Function* AST::parse_function(std::vector<Token>& tokens) {
-    Function* func = new Function;
+std::unique_ptr<Function> AST::parse_function(std::vector<Token>& tokens) {
+    auto func = std::make_unique<Function>();
     bool is_int = tokens[0].expect(Int_key);
 
     if (!is_int){
@@ -45,7 +45,7 @@ Function* AST::parse_function(std::vector<Token>& tokens) {
     
     tokens.erase(tokens.begin(), tokens.begin() + 6);
 
-    func->state_ptr = std::unique_ptr<Statement>(parse_statement(tokens));
+    func->state_ptr = parse_statement(tokens);
 
     if (tokens[0].expect(Close_brace)){
         tokens.erase(tokens.begin());
@@ -56,8 +56,8 @@ Function* AST::parse_function(std::vector<Token>& tokens) {
     return func;
 }
 
-Statement* AST::parse_statement(std::vector<Token>& tokens){
-    Statement* state = new Statement;
+std::unique_ptr<Statement> AST::parse_statement(std::vector<Token>& tokens){
+    auto state = std::make_unique<Statement>();
 
     if(!tokens[0].expect(Return_key)){
         throw std::runtime_error("Expected return key");
@@ -65,7 +65,7 @@ Statement* AST::parse_statement(std::vector<Token>& tokens){
 
     tokens.erase(tokens.begin());
 
-    state->exp_ptr = std::unique_ptr<Expression>(parse_expression(tokens, 0));
+    state->exp_ptr = parse_expression(tokens, 0);
 
     if(!tokens[0].expect(Semicolon)){
         throw std::runtime_error("Expected ;");
@@ -75,9 +75,9 @@ Statement* AST::parse_statement(std::vector<Token>& tokens){
     return state;
 }
 
-Expression* AST::parse_factor(std::vector<Token>& tokens){
-    Expression* exp = nullptr;
-
+std::unique_ptr<Expression> AST::parse_factor(std::vector<Token>& tokens){
+    std::unique_ptr<Expression> exp;
+    
     if(tokens[0].expect(ConstantLiteral)){
         exp = parse_constant(tokens);
         tokens.erase(tokens.begin());
@@ -106,29 +106,27 @@ A BinaryOp's RHS expression can only contain a single factor or an operation wit
 LHS can only contain a single factor or an operation with equal or lower precedence
 Using postorder traversal through the AST, operation precedence will be maintained by the tree's grouped structure
 */
-Expression* AST::parse_expression(std::vector<Token>& tokens, int min_precedence){
-    Expression* left_exp = nullptr;
-
-    left_exp = parse_factor(tokens);
+std::unique_ptr<Expression> AST::parse_expression(std::vector<Token>& tokens, int min_precedence){
+    auto left_exp = parse_factor(tokens);
 
     while (((tokens[0].expect(Addition)) || (tokens[0].expect(Negation)) || (tokens[0].expect(Modulus))
     || (tokens[0].expect(Multiplication)) || (tokens[0].expect(Division))) &&
     precedence_map[tokens[0].get_type()] >= min_precedence){
-        BinaryOp* b_op = new BinaryOp;
+        auto b_op = std::make_unique<BinaryOp>();
         b_op->op = tokens[0].get_type();
         int prec =  precedence_map[b_op->op];
         tokens.erase(tokens.begin());
         //prec + 1 enforces left-associativity
-        b_op->exp_right = std::unique_ptr<Expression>(parse_expression(tokens, prec + 1));
-        b_op->exp_left = std::unique_ptr<Expression>(left_exp);
+        b_op->exp_right = parse_expression(tokens, prec + 1);
+        b_op->exp_left = std::move(left_exp);
         //Updates for left-associativity
-        left_exp = b_op;
+        left_exp = std::move(b_op);
     }
     return left_exp;
 }
 
-UnaryOp* AST::parse_unary(std::vector<Token>& tokens){
-    UnaryOp* ptr = new UnaryOp;
+std::unique_ptr<UnaryOp> AST::parse_unary(std::vector<Token>& tokens){
+    auto ptr = std::make_unique<UnaryOp>();
     if (tokens[0].expect(Negation)){
         ptr->type = Negation;
         tokens.erase(tokens.begin());
@@ -137,12 +135,12 @@ UnaryOp* AST::parse_unary(std::vector<Token>& tokens){
         ptr->type = Complement;
         tokens.erase(tokens.begin());
     }
-    ptr->exp_ptr = std::unique_ptr<Expression>(parse_factor(tokens));
+    ptr->exp_ptr = parse_factor(tokens);
     return ptr;
 }
 
-Constant* AST::parse_constant(std::vector<Token>& tokens){
-    Constant* c = new Constant;
+std::unique_ptr<Constant> AST::parse_constant(std::vector<Token>& tokens){
+    auto c = std::make_unique<Constant>();
     c->value = tokens[0].get_value();
     return c;
 }

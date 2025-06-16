@@ -3,15 +3,14 @@
 
 void AsmPrinter::visit(AsmProgram* node) {
     std::cout << "Program:" << std::endl;
-    AsmFunction* ptr = node->func_ptr;
-    if (ptr) {
-        ptr->accept(this);
+    if (node->func_ptr) {
+        node->func_ptr->accept(this);
     }
 }
 
 void AsmPrinter::visit(AsmFunction* node) {
     std::cout << "Function: Name: " << node->name << std::endl;
-    for (AsmInstruction* instr : node->instructions) {
+    for (const auto &instr : node->instructions) {
         if (instr) {
             instr->accept(this);
         }

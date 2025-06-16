@@ -2,6 +2,7 @@
 #define ASM_PSEUDO_LOCATOR_HPP
 
 #include <unordered_map>
+#include <memory>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Second compiler pass that asssigns memory location for pseudo registers
@@ -21,10 +22,10 @@ class AsmPseudoLocator: public AsmVisitor {
     virtual void visit(AsmPseudoReg* node) override;
     virtual void visit(StackLocation* node) override;
 
-    AsmPseudoLocator(std::unordered_map<AsmPseudoReg*, int> &map);
+    AsmPseudoLocator(std::unordered_map<std::shared_ptr<AsmPseudoReg>, int> &map);
 
     private:
-    std::unordered_map<AsmPseudoReg*, int>& pseudo_map;
+    std::unordered_map<std::shared_ptr<AsmPseudoReg>, int>& pseudo_map;
 };
 
 #endif

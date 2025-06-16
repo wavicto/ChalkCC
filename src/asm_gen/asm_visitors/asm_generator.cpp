@@ -3,9 +3,8 @@
 
 void AsmGenerator::visit(AsmProgram* node){
     file.open("assembly.s");
-    AsmFunction* ptr = node->func_ptr;
-    if (ptr){
-        ptr->accept(this);
+    if (node->func_ptr){
+        node->func_ptr->accept(this);
     }
     file << ".section .note.GNU-stack,\"\",@progbits" << std::endl;
 }
@@ -15,7 +14,7 @@ void AsmGenerator::visit(AsmFunction* node){
     file << node->name << ":" << std::endl;
     file << "\tpushq\t%rbp" << std::endl;
     file << "\tmovq\t%rsp, %rbp" << std::endl;
-    for (auto ptr : node->instructions){
+    for (const auto &ptr : node->instructions){
         if (ptr){
             ptr->accept(this);
         }

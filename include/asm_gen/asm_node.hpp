@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "asm_gen/asm_visitors/asm_visitor.hpp"
 
 //Register names, size agnostic
