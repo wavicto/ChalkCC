@@ -81,6 +81,13 @@ int main(int argc, char *argv[]) {
     std::string directory = input_path.parent_path().string();
     std::string name = input_path.stem().string();
 
+    std::string output_path;
+    if (directory.empty()) {
+        output_path = name;
+    } else {
+        output_path = directory + "/" + name;
+    }
+
     //Compiles the preprocessed file and outputs an assembly file
     Lexer lex = Lexer();
     std::vector<Token> tokens = lex.extract(preprocessed_file);
@@ -90,7 +97,7 @@ int main(int argc, char *argv[]) {
     a.asm_gen();
 
     //Produce an executable file
-    std::string assemble_link = "gcc assembly.s -o " + directory + "/" + name;
+    std::string assemble_link = "gcc assembly.s -o " + output_path;
 
     system(assemble_link.c_str());
 
