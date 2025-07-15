@@ -1,12 +1,12 @@
-# chalkcc
+# ChalkCC
 
-**chalkcc** is a compiler for a subset of C, implemented in C++.
+**ChalkCC** is a compiler for a subset of C, implemented in C++.
 
 It is a toy compiler written for educational purposes, targeting **x86-compatible assembly**.
 
 ## Supported Features
 
-**chalkcc** currently supports: 
+**ChalkCC** currently supports: 
 - Main functions
 - Return statements
 - Constants
@@ -20,13 +20,9 @@ It is a toy compiler written for educational purposes, targeting **x86-compatibl
     - Division `/`
     - Modulus `%`
 
-Work in Progress: 
-- Local variables
-- Logical expressions
-
 ## Build Instructions
 
-To build **chalkcc**:
+To build **ChalkCC**:
 ```bash
 make
 ```
@@ -69,7 +65,7 @@ Breaks down the TAC IR further and traverses the structure to generate x86-compa
 
 ### Visitor Pattern
 
-**chalkcc** employs the **Visitor Pattern** to traverse and operate upon the nodes of its various structures (AST, IR, etc), allowing chosen functionality to be implemented without modifying the nodes themselves.
+**ChalkCC** employs the **Visitor Pattern** to traverse and operate upon the nodes of its various structures (AST, IR, etc), allowing chosen functionality to be implemented without modifying the nodes themselves.
 
 ## References
 Jones, J. (2003). Abstract Syntax Tree Implementation Idioms. In *Proceedings of the 10th Conference
