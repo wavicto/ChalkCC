@@ -20,6 +20,13 @@ It is a toy compiler written for educational purposes, targeting **x86-compatibl
     - Division `/`
     - Modulus `%`
 
+## Dependencies
+
+- g++ (C++17 support)
+- make
+- gcc
+- Platform: Linux
+
 ## Build Instructions
 
 To build **ChalkCC**:
